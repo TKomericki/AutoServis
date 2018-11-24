@@ -1,8 +1,6 @@
-﻿RegKorisnikAdmin = {korisnickoImeK, email, imeKorisnika, prezimeKorisnika, brojTelefona, regOznakaVozila, jeAdmin} 
-K = {korisnickoImeK}
-
-Serviser = {korisnickoIme, email, imeServisera, prezimeServisera, brojTelefona}
-K = {korisnickoImeS}
+﻿Korisnik = {idKorisnik, korisnickoIme, email, imeKorisnika, prezimeKorisnika, brojTelefona,
+	    regOznakaVozila, uloga, vrijemePocPrijave, vrijemeKrajPrijave} 
+K = {idKorisnik}
 
 Vozila = {regOznakaVozila, serviserIme, popravljen}
 K = {regOznakaVozila}
@@ -10,8 +8,20 @@ K = {regOznakaVozila}
 ZamjenskoVozilo = {regOznakaZVozila, imeKorisnika}
 K = {regOznakaZVozila}
 
-odabire = {korisnickoImeK, korisnickoImeS}
-K = {korisnickoImeK}
+RadnoVrijeme = {idServiser, daniUTjednu, satiUDanu}
+K = {idServiser, daniUTjednu}
+
+ZauzetTermin = {idServiser, pocTermin, trajanje}
+K = {idServiser, pocTermin}
+
+odabireServisera = {idServiser, idKorisnik}
+K = {idKorisnik}
 
 popravlja = {regOznakaVozila, datumPocetka, korisnickoImeS}
 K = {regOznakaVozila, datumPocetka}
+
+radi = {idServiser, daniUTjednu}
+K = {idServiser, daniUTjednu}
+
+zauzima = {idServiser, pocTermin}
+K = {idServiser, pocTermin}
