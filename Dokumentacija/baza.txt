@@ -1,27 +1,67 @@
 ﻿Korisnik = {idKorisnik, korisnickoIme, email, imeKorisnika, prezimeKorisnika, brojTelefona,
-	    regOznakaVozila, uloga, vrijemePocPrijave, vrijemeKrajPrijave} 
+	    
+regOznakaVozila, uloga} 
+
 K = {idKorisnik}
 
-Vozila = {regOznakaVozila, serviserIme, popravljen}
-K = {regOznakaVozila}
 
-ZamjenskoVozilo = {regOznakaZVozila, imeKorisnika}
+
+ZamjenskaVozila = {regOznakaZVozila, idKorisnika}
+
 K = {regOznakaZVozila}
 
+
+
 RadnoVrijeme = {idServiser, daniUTjednu, satiUDanu}
+
 K = {idServiser, daniUTjednu}
+
+
 
 ZauzetTermin = {idServiser, pocTermin, trajanje}
+
 K = {idServiser, pocTermin}
 
-odabireServisera = {idServiser, idKorisnik}
-K = {idKorisnik}
 
-popravlja = {regOznakaVozila, datumPocetka, korisnickoImeS}
-K = {regOznakaVozila, datumPocetka}
+
+odabireServisera = {idServiser, idKorisnik, vrijemePodnosenjaPrijave}
+
+K = {idKorisnik, vrijemePodnosenjaPrijave}
+
+
 
 radi = {idServiser, daniUTjednu}
+
 K = {idServiser, daniUTjednu}
 
+
+
 zauzima = {idServiser, pocTermin}
+
 K = {idServiser, pocTermin}
+
+
+
+odabire = {idKorisnika, vrijemePodnosenjaPrijave, idUsluge}
+
+K = {idKorisnika, vrijemePodnosenjaPrijave, idUsluge}
+
+
+
+posuđuje = {idKorisnika, vrijemePodnosenjaPrijave, regOznakaZVozila}
+
+K = {idKorisnika, vrijemePodnasanjaPrijave}
+
+
+
+Usluge = {idUsluge, imeUsluge, cijena}
+
+K = {idUsluge}
+
+
+
+Prijava = {idKorisnika, vrijemePodnosenjaPrijave, gotovaPrijava, 
+	   
+preuzetaPrijava, zavrsenaPrijava, vrijemeZavrsetkaPrijave}
+
+K = {idKorisnika, vrijemePodnosenjaPrijave}
