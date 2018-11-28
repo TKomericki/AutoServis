@@ -1,0 +1,34 @@
+﻿Korisnik = {idKorisnik, korisnickoIme, email, imeKorisnika, prezimeKorisnika, brojTelefona,
+	    regOznakaVozila, uloga} 
+K = {idKorisnik}
+
+ZamjenskaVozila = {regOznakaZVozila, imeKorisnika}
+K = {regOznakaZVozila}
+
+RadnoVrijeme = {idServiser, daniUTjednu, satiUDanu}
+K = {idServiser, daniUTjednu}
+
+ZauzetTermin = {idServiser, pocTermin, trajanje}
+K = {idServiser, pocTermin}
+
+odabireServisera = {idServiser, idKorisnik, vrijemePodnasanjaPrijave}
+K = {idKorisnik, vrijemePodnasanjaPrijave}
+
+radi = {idServiser, daniUTjednu}
+K = {idServiser, daniUTjednu}
+
+zauzima = {idServiser, pocTermin}
+K = {idServiser, pocTermin}
+
+odabire = {idKorisnika, vrijemePodnasanjaPrijave, idUsluge}
+K = {idKorisnika, vrijemePodnasanjaPrijave, idUsluge}
+
+posuđuje = {idKorisnika, vrijemePodnasanjaPrijave, regOznakaZVozila}
+K = {idKorisnika, vrijemePodnasanjaPrijave}
+
+Usluge = {idUsluge, imeUsluge, cijena}
+K = {idUsluge}
+
+Prijava = {idKorisnika, vrijemePodnasanjaPrijave, gotovaPrijava, 
+	   preuzetaPrijava, zavrsenaPrijava, vrijemeZavrsetkaPrijave}
+K = {idKorisnika, vrijemePodnasanjaPrijave}
