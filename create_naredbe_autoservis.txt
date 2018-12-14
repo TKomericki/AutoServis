@@ -1,0 +1,113 @@
+CREATE TABLE autoservis.Korisnik (
+    `idKorisnik` int  NOT NULL ,
+    `email` VARCHAR(50)  NOT NULL ,
+    `imeKorisnika` VARCHAR(50)  NOT NULL ,
+    `prezimeKorisnik` VARCHAR(50)  NOT NULL ,
+    `brojTelefona` VARCHAR(50)  NOT NULL ,
+    `regOznakaVozila` VARCHAR(50)  NOT NULL ,
+    `uloga` VARCHAR(50)  NOT NULL ,
+    PRIMARY KEY (
+        `idKorisnik`
+    )
+);
+
+CREATE TABLE autoservis.ZamjenskaVozila (
+    `regOznakaZVozila` VARCHAR(50) NOT NULL ,
+    `idKorisnik` int  NULL ,
+    PRIMARY KEY (
+        `regOznakaZVozila`
+    )
+);
+
+CREATE TABLE autoservis.RadnoVrijeme (
+    `idServiser` int  NOT NULL ,
+    `daniUTjednu` VARCHAR(50)  NOT NULL ,
+    `satiUDanu` VARCHAR(50)  NOT NULL ,
+    PRIMARY KEY (
+        `idServiser`
+    )
+);
+
+CREATE TABLE autoservis.ZauzetTermin (
+    `idServiser` int  NOT NULL ,
+    `pocTermin` datetime  NOT NULL ,
+    `trajanje` time  NOT NULL ,
+    PRIMARY KEY (
+        `idServiser`
+    )
+);
+
+CREATE TABLE autoservis.Prijava (
+    `idKorisnik` int  NOT NULL ,
+    `vrijemePodnosenjaPrijave` datetime  NOT NULL ,
+    `gotovaPrijava` boolean  NOT NULL ,
+    `preuzetaPrijava` boolean  NOT NULL ,
+    `zavrsenaPrijava` boolean  NOT NULL ,
+    `vrijemeZavrsetkaPrijave` date  NOT NULL ,
+    `regOznakaZVozila` VARCHAR(50)  NOT NULL ,
+    PRIMARY KEY (
+        `idKorisnik`,`vrijemePodnosenjaPrijave`
+    )
+);
+
+CREATE TABLE autoservis.Usluge (
+    `idUsluge` int  NOT NULL ,
+    `imeUsluge` VARCHAR(50)  NOT NULL ,
+    `cijena` int  NOT NULL ,
+    PRIMARY KEY (
+        `idUsluge`
+    )
+);
+
+CREATE TABLE autoservis.Odabire (
+    `idKorisnika` int  NOT NULL ,
+    `vrijemePodnosenjaPrijave` datetime  NOT NULL ,
+    `idUsluge` int  NOT NULL ,
+    PRIMARY KEY (
+        `idKorisnika`,`vrijemePodnosenjaPrijave`,`idUsluge`
+    )
+);
+
+CREATE TABLE autoservis.OdabireServisera (
+    `idServiser` int  NOT NULL ,
+    `idKorisnik` int  NOT NULL ,
+    `vrijemePodnosenjaPrijave` datetime  NOT NULL ,
+    PRIMARY KEY (
+        `idServiser`,`vrijemePodnosenjaPrijave`
+    )
+);
+
+ALTER TABLE autoservis.Korisnik ADD CONSTRAINT `fk_Korisnik_regOznakaVozila` FOREIGN KEY(`regOznakaVozila`)
+REFERENCES `ZamjenskaVozila` (`regOznakaZVozila`);
+
+ALTER TABLE autoservis.ZamjenskaVozila ADD CONSTRAINT `fk_ZamjenskaVozila_idKorisnik` FOREIGN KEY(`idKorisnik`)
+REFERENCES `Korisnik` (`idKorisnik`);
+
+ALTER TABLE autoservis.RadnoVrijeme ADD CONSTRAINT `fk_RadnoVrijeme_idServiser` FOREIGN KEY(`idServiser`)
+REFERENCES autoservis.Korisnik (`idKorisnik`);
+
+ALTER TABLE autoservis.ZauzetTermin ADD CONSTRAINT `fk_ZauzetTermin_idServiser` FOREIGN KEY(`idServiser`)
+REFERENCES autoservis.Korisnik (`idKorisnik`);
+
+ALTER TABLE autoservis.Prijava ADD CONSTRAINT `fk_Prijava_regOznakaZVozila` FOREIGN KEY(`regOznakaZVozila`)
+REFERENCES autoservis.ZamjenskaVozila (`regOznakaZVozila`);
+
+/*ALTER TABLE autoservis.Odabire ADD CONSTRAINT `fk_Odabire_vrijemePodnosenjaPrijave` FOREIGN KEY(`vrijemePodnosenjaPrijave`)
+REFERENCES autoservis.Prijava (`vrijemePodnosenjaPrijave`);*/
+
+ALTER TABLE autoservis.Odabire ADD CONSTRAINT `fk_Odabire_idUsluge` FOREIGN KEY(`idUsluge`)
+REFERENCES autoservis.Usluge (`idUsluge`);
+
+ALTER TABLE autoservis.OdabireServisera ADD CONSTRAINT `fk_OdabireServisera_idServiser` FOREIGN KEY(`idServiser`)
+REFERENCES autoservis.Korisnik (`idKorisnik`);
+
+ALTER TABLE autoservis.OdabireServisera ADD CONSTRAINT `fk_OdabireServisera_idKorisnik` FOREIGN KEY(`idKorisnik`)
+REFERENCES autoservis.Korisnik (`idKorisnik`);
+
+/*ALTER TABLE autoservis.OdabireServisera ADD CONSTRAINT `fk_OdabireServisera_vrijemePodnosenjaPrijave` FOREIGN KEY(`vrijemePodnosenjaPrijave`)
+REFERENCES autoservis.Prijava (`vrijemePodnosenjaPrijave`);*/
+
+
+CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'password';
+
+GRANT ALL ON autoservis.* TO 'testuser'@'localhost';
