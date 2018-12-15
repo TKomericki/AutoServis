@@ -1,4 +1,5 @@
 package hr.fer.opp.domain;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -6,29 +7,36 @@ import javax.persistence.Id;
 
 @Entity
 public class Korisnik {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idKorisnik;
-	private String emailKorisnik;
+	private String email;
+	private String lozinka;
+	public String getLozinka() {
+		return lozinka;
+	}
+	public void setLozinka(String lozinka) {
+		this.lozinka = lozinka;
+	}
 	private String imeKorisnika;
-	private String prezimeKorisnika;
+	private String prezimeKorisnik;
 	private String brojTelefona;
 	private String regOznakaVozila;
 	private String uloga;
 	
 	public Korisnik() {}
-	
-	public int getIdKorisnik() {
+	public Integer getIdKorisnik() {
 		return idKorisnik;
 	}
-	public void setIdKorisnik(int idKorisnik) {
+	public void setIdKorisnik(Integer idKorisnik) {
 		this.idKorisnik = idKorisnik;
 	}
 	public String getEmailKorisnik() {
-		return emailKorisnik;
+		return email;
 	}
 	public void setEmailKorisnik(String emailKorisnik) {
-		this.emailKorisnik = emailKorisnik;
+		this.email = emailKorisnik;
 	}
 	public String getImeKorisnika() {
 		return imeKorisnika;
@@ -37,10 +45,10 @@ public class Korisnik {
 		this.imeKorisnika = imeKorisnika;
 	}
 	public String getPrezimeKorisnika() {
-		return prezimeKorisnika;
+		return prezimeKorisnik;
 	}
 	public void setPrezimeKorisnika(String prezimeKorisnika) {
-		this.prezimeKorisnika = prezimeKorisnika;
+		this.prezimeKorisnik = prezimeKorisnika;
 	}
 	public String getBrojTelefona() {
 		return brojTelefona;
@@ -60,5 +68,5 @@ public class Korisnik {
 	public void setUloga(String uloga) {
 		this.uloga = uloga;
 	}
-
+	
 }
