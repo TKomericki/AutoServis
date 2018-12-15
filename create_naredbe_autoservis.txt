@@ -1,6 +1,10 @@
+drop schema autoservis;
+create schema autoservis;
+
 CREATE TABLE autoservis.Korisnik (
-    `idKorisnik` int  NOT NULL ,
+    `idKorisnik` int  NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(50)  NOT NULL ,
+    `lozinka` VARCHAR(50) NOT NULL,
     `imeKorisnika` VARCHAR(50)  NOT NULL ,
     `prezimeKorisnik` VARCHAR(50)  NOT NULL ,
     `brojTelefona` VARCHAR(50)  NOT NULL ,
@@ -51,7 +55,7 @@ CREATE TABLE autoservis.Prijava (
 );
 
 CREATE TABLE autoservis.Usluge (
-    `idUsluge` int  NOT NULL ,
+    `idUsluge` int  NOT NULL AUTO_INCREMENT,
     `imeUsluge` VARCHAR(50)  NOT NULL ,
     `cijena` int  NOT NULL ,
     PRIMARY KEY (
@@ -77,8 +81,7 @@ CREATE TABLE autoservis.OdabireServisera (
     )
 );
 
-ALTER TABLE autoservis.Korisnik ADD CONSTRAINT `fk_Korisnik_regOznakaVozila` FOREIGN KEY(`regOznakaVozila`)
-REFERENCES `ZamjenskaVozila` (`regOznakaZVozila`);
+
 
 ALTER TABLE autoservis.ZamjenskaVozila ADD CONSTRAINT `fk_ZamjenskaVozila_idKorisnik` FOREIGN KEY(`idKorisnik`)
 REFERENCES `Korisnik` (`idKorisnik`);
@@ -108,6 +111,6 @@ REFERENCES autoservis.Korisnik (`idKorisnik`);
 REFERENCES autoservis.Prijava (`vrijemePodnosenjaPrijave`);*/
 
 
-CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'password';
+#CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'password';
 
 GRANT ALL ON autoservis.* TO 'testuser'@'localhost';
