@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="index.ico">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="login.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin">
+      <a href="pocetna.html">
+		<img class="mb-4" src="assets/brand/AutoServis.png" alt="" width="72" height="72">
+	  </a>
+      <h1 class="h3 mb-3 font-weight-normal">Prijava</h1>
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" class="form-control" placeholder="Adresa E-pošte" required autofocus
+	  oninvalid="this.setCustomValidity('Unesite korisničko ime')"
+    onchange="this.setCustomValidity('')">
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Lozinka" required
+	  oninvalid="this.setCustomValidity('Unesite Lozinku')"
+    oninput="this.setCustomValidity('')">
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Zapamti me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Prijava</button>
+	  <a href="registracija.html" class="btn btn-default">Registracija</a>
+	  <a href="#" class="btn btn-default">Zaboravljena lozinka</a>
+	  
+	  <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017-2018 AutoServis</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+	</footer>
+    </form>
+	
+	
+	
+	
+  </body>
+</html>
