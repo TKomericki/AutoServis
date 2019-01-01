@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Spring Security Tutorial</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body class="text-center">
+
+
+<div class="container">
+    <a href="pocetna">
+        <img th:src="@{/images/AutoServis.png}" width="72" height="72" alt=""/>
+    </a>
+    <form th:action="@{/login}" method="POST" class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">Prijava</h1>
+
+        <input type="text" id="email" name="email" th:placeholder="Email"
+               class="form-control"/>
+        <input type="password" th:placeholder="Password"
+               id="password" name="password" class="form-control"/>
+        
+        <label>
+            <input type="checkbox" value="remember-me"> Zapamti me
+        </label>
+        
+        <div align="center" th:if="${param.error}">
+            <p style="font-size: 20; color: #FF1C19;">Email or Password invalid, please verify</p>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit"
+                th:text="Login"></button>
+    </form>
+    <a href="registration" class="btn btn-default">Registracija</a>
+    <a href="#" class="btn btn-default">Zaboravljena lozinka</a>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017-2018 AutoServis</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+	</footer>
+</div>
+</body>
+</html>

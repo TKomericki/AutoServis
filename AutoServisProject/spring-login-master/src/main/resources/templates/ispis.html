@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+	<body>
+		<table>
+    		<thead>
+        		<tr>
+            		<th> email </th>
+            		<th> Name </th>
+            		<th> LastName </th>
+        		</tr>
+    	</thead>
+    	<tbody>
+    		<tr th:if="${users.isEmpty()}">
+            	<td colspan="2"> Nema korisnika osim vas :) </td>
+        	</tr>
+        	<tr th:each="user : ${users}">
+            	<td><span th:text="${user.getEmail()}"></span></td>
+            	<td><span th:text="${user.getName()}"></span></td>
+            	<td><span th:text="${user.getLastName()}"></span></td>
+        	</tr>
+    	</tbody>
+</table>
+	</body>
+</html>
