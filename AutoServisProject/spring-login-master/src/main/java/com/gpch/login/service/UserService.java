@@ -1,7 +1,7 @@
 package com.gpch.login.service;
 
-import com.gpch.login.model.User;
-import com.gpch.login.repository.UserRepository;
+import com.gpch.login.model.*;
+import com.gpch.login.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,12 +14,14 @@ import java.util.Set;
 public class UserService {
 
     private UserRepository userRepository;
+    private PrijavaRepository prijavaRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository,
+    public UserService(UserRepository userRepository, PrijavaRepository prijavaRepository,
                        BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.prijavaRepository = prijavaRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -39,5 +41,12 @@ public class UserService {
     	users.addAll(userRepository.findAll());
     	users.removeIf(r -> r.getRole().equals("ADMIN"));
     	return users;
+    }
+    
+    public Set<Prijava> getUserPrijave(int user_id){
+    	Set<Prijava> prijave = new HashSet<>();
+    	prijave.addAll(prijavaRepository.findAll());
+    	prijave.removeIf(s -> s.getPrijavaKey().getIdKorisnika() != user_id);
+    	return prijave;
     }
 }

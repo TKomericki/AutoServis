@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import com.gpch.login.model.Prijava;
 import com.gpch.login.model.User;
 import com.gpch.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,11 +88,15 @@ public class LoginController {
     public ModelAndView ispis(){
     	ModelAndView modelAndView = new ModelAndView();
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	User user = userService.findUserByEmail(auth.getName());
     	Set<User> users = new HashSet<>();
+    	Set<Prijava> prijave = new HashSet<>();
     	for(GrantedAuthority authority : auth.getAuthorities()) {
     		if(authority.getAuthority().equals("ADMIN")) users.addAll(userService.getAllUsers());
+    		else if(authority.getAuthority().equals("KORISNIK")) prijave.addAll(userService.getUserPrijave(user.getId()));
     	}
-    	modelAndView.addObject("users", users);        
+    	modelAndView.addObject("users", users);
+    	modelAndView.addObject("prijave", prijave); 
         modelAndView.setViewName("ispis");
         return modelAndView;
     }
