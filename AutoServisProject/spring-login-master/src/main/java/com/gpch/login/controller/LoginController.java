@@ -107,6 +107,12 @@ public class LoginController {
         modelAndView.setViewName("error");
         return modelAndView;
     }
-
+    
+    @RequestMapping(value={"/popravak"}, method = RequestMethod.GET)
+    public ModelAndView popravak(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("popravak");
+        return modelAndView;
+    }
 
 }

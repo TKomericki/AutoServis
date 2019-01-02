@@ -1,5 +1,5 @@
 use login;
-replace into user(user_id, email, password, name, last_name, active, broj_Telefona, role) values(1, 'admin@admin.hr', '$2a$10$byvHamNquEgFfTaXJiL/9.sCPtQel5zh0nf8vlghOal5TR.quiJTe', 'Admin', 'Admin', 1, '0990000000', 'ADMIN'); 
+replace into user(user_id, email, password, name, last_name, active, broj_Telefona, role) values(0, 'admin@admin.hr', '$2a$10$byvHamNquEgFfTaXJiL/9.sCPtQel5zh0nf8vlghOal5TR.quiJTe', 'Admin', 'Admin', 1, '0990000000', 'ADMIN'); 
 replace into usluga(id_usluge, ime_usluge, cijena_usluge) values (1, 'zamjena guma', 200);
 replace into usluga(id_usluge, ime_usluge, cijena_usluge) values (2, 'zamjena ulja', 230);
 replace into usluga(id_usluge, ime_usluge, cijena_usluge) values (3, 'zamjena filtera zraka', 100);

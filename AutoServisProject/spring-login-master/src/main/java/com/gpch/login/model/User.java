@@ -53,6 +53,8 @@ public class User {
     //@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Column(name = "role")
     private String role;
+    @Column(name = "id_radnog_vremena")
+    private String idRadnogVremena;
 
     public String getEmail() {
 		return email;
