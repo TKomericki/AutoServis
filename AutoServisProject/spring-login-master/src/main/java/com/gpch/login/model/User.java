@@ -42,12 +42,12 @@ public class User {
     @NotEmpty(message = "*Please provide your phone number")
     private String brojTelefona;
     @Column(name = "tipVozila")
-    @NotEmpty(message = "*Please provide your car model")
+    //@NotEmpty(message = "*Please provide your car model")
     private String tipVozila;
     @Column(name = "godinaProizvodnje")
-    private int godinaProizvodnje;
+    private String godinaProizvodnje;
     @Column(name = "registracija")
-    @NotEmpty(message = "*Please provide your registration license")
+    //@NotEmpty(message = "*Please provide your registration license")
     private String registracija;
     //@ManyToMany(cascade = CascadeType.ALL)
     //@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -102,10 +102,10 @@ public class User {
 	public void setTipVozila(String tipVozila) {
 		this.tipVozila = tipVozila;
 	}
-	public int getGodinaProizvodnje() {
+	public String getGodinaProizvodnje() {
 		return godinaProizvodnje;
 	}
-	public void setGodinaProizvodnje(int godinaProizvodnje) {
+	public void setGodinaProizvodnje(String godinaProizvodnje) {
 		this.godinaProizvodnje = godinaProizvodnje;
 	}
 	public String getRegistracija() {

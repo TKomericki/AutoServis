@@ -36,10 +36,6 @@ public class Usluga {
 		return idUsluge;
 	}
 
-	public void setIdUsluge(int idUsluge) {
-		this.idUsluge = idUsluge;
-	}
-
 	public String getImeUsluge() {
 		return imeUsluge;
 	}
