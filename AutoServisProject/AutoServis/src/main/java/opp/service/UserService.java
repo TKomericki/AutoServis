@@ -16,16 +16,19 @@ public class UserService {
     private UserRepository userRepository;
     private PrijavaRepository prijavaRepository;
     private UslugaRepository uslugaRepository;
+    private ZamjenskoVoziloRepository zamjenskoVoziloRepository;
     private RadnoVrijemeRepository radnoVrijemeRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository, PrijavaRepository prijavaRepository,
-    				   UslugaRepository uslugaRepository, RadnoVrijemeRepository radnoVrijemeRepository, 
+    				   UslugaRepository uslugaRepository, RadnoVrijemeRepository radnoVrijemeRepository,
+    				   ZamjenskoVoziloRepository zamjenskoVoziloRepository,
                        BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.prijavaRepository = prijavaRepository;
         this.uslugaRepository = uslugaRepository;
+        this.zamjenskoVoziloRepository = zamjenskoVoziloRepository;
         this.radnoVrijemeRepository = radnoVrijemeRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -60,5 +63,12 @@ public class UserService {
     	prijave.addAll(prijavaRepository.findAll());
     	prijave.removeIf(s -> s.getIdServisera() != serviser_id);
     	return prijave;
+    }
+    
+    public Set<ZamjenskoVozilo> getSlobodnaVozila() {
+    	Set<ZamjenskoVozilo> zamjenskaVozila = new HashSet<>();
+    	zamjenskaVozila.addAll(zamjenskoVoziloRepository.findAll());
+    	zamjenskaVozila.removeIf(s -> s.getIdKorisnik() != null);
+    	return zamjenskaVozila;
     }
 }
