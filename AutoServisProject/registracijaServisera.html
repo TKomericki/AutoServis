@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>RegistracijaServisera</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+        <div class="py-5 text-center">
+            <a href="pocetna">
+                <img th:src="@{/images/AutoServis.png}" width="72" height="72" alt=""/>
+            </a>
+            <h2>Registracija Servisera</h2>
+            <p class="lead">Unesite podatke o serviserima</p>
+        </div>
+    <div class="row">
+        <div class="col-md-8 order-md-1">
+            <form autocomplete="off" action="#" th:action="@{/registration}"
+                  th:object="${user}" method="post" class="form-horizontal"
+                  role="form">
+            <h4 class="mb-3">Ispunite polja:</h4>
+
+            <div class="row">
+                <!--<div class="form-group">-->
+                    <div class="col-md-6 mb-3">
+                        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                               class="validation-message"></label>
+                        <input type="text" th:field="*{name}" placeholder="Name"
+                               class="form-control"/>
+                    </div>
+                <!--</div>-->
+
+                <!--<div class="form-group">-->
+                    <div class="col-md-6 mb-3">
+                        <label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+                               class="validation-message"></label>
+                        <input type="text" th:field="*{lastName}"
+                               placeholder="Last Name" class="form-control"/>
+                    </div>
+                <!--</div>-->
+            </div>
+                
+                    <div class="mb-3">
+                        <input type="text" th:field="*{email}" placeholder="Email"
+                               class="form-control"/> <label
+                            th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                            class="validation-message"></label>
+                    </div>
+                
+                
+                    <div class="mb-3">
+                        <input type="password" th:field="*{password}"
+                               placeholder="Password" class="form-control"/> <label
+                            th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                            class="validation-message"></label>
+                    </div>
+                
+                
+                    <div class="mb-3">
+                        <input type="text" th:field="*{brojTelefona}"
+                               placeholder="broj Telefona" class="form-control"/> <label
+                            th:if="${#fields.hasErrors('brojTelefona')}" th:errors="*{brojTelefona}"
+                            class="validation-message"></label>
+                    </div>
+                
+
+                <div class="container">
+                
+                    <div class="container" id="containerNoLeftPadding">
+					<label class="RadioContainer">One
+						<input type="radio" checked="checked" name="radio" value="1">
+						<span class="checkmark"></span>
+					</label>
+					
+					<table class="table">
+					  <thead>
+						<tr>
+						  <th scope="col">Ponedjeljak</th>
+						  <th scope="col">Utorak</th>
+						  <th scope="col">Srijeda</th>
+						  <th scope="col">Četvrtak</th>
+						  <th scope="col">Petak</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						  <td>1</td>
+						  <td>Mark</td>
+						  <td>Otto</td>
+						  <td>@mdo</td>
+						  <td>Tea</td>
+						</tr>
+					  </tbody>
+					</table>
+				
+				</div>
+				
+				
+				<div class="container" id="containerNoLeftPadding">
+					<label class="RadioContainer">Two
+						<input type="radio" name="radio" value="2">
+						<span class="checkmark"></span>
+					</label>
+					
+					<table class="table">
+					  <thead>
+						<tr>
+						  <th scope="col">Ponedjeljak</th>
+						  <th scope="col">Utorak</th>
+						  <th scope="col">Srijeda</th>
+						  <th scope="col">Četvrtak</th>
+						  <th scope="col">Petak</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						  <td>1</td>
+						  <td>Mark</td>
+						  <td>Otto</td>
+						  <td>@mdo</td>
+						  <td>Tea</td>
+						</tr>
+					  </tbody>
+					</table>
+					
+				</div>
+                
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Register User</button>
+
+                <a href="login" class="btn btn-default">Već sam registriran.</a>
+                <h2><span class="text-success" th:utext="${successMessage}"></span></h2>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/holder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+</body>
+</html>
