@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import opp.domain.*;
 import opp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,6 +56,35 @@ public class LoginController {
             modelAndView.addObject("successMessage", "User has been registered successfully");
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");
+
+        }
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="/registracijaServisera", method = RequestMethod.GET)
+    public ModelAndView serviserRegistration(){
+        ModelAndView modelAndView = new ModelAndView();
+        User serviser = new User();
+        modelAndView.addObject("serviser", serviser);
+        modelAndView.setViewName("registracijaServisera");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value = "/registracijaServisera", method = RequestMethod.POST)
+    public ModelAndView createNewServiser(@Valid User serviser, BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
+        User postojeciServiser = userService.findUserByEmail(serviser.getEmail());
+        if (postojeciServiser != null) {
+            bindingResult.rejectValue("email", "error.serviser",
+                            "There is already a serviser registered with the email provided");
+        }
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("registracijaServisera");
+        } else {
+            userService.saveUser(serviser);
+            modelAndView.addObject("successMessage", "Serviser has been registered successfully");
+            modelAndView.addObject("serviser", new User());
+            modelAndView.setViewName("registracijaServisera");
 
         }
         return modelAndView;
