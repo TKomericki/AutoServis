@@ -12,11 +12,11 @@ import java.util.Date;
 @Embeddable
 @EqualsAndHashCode
 @AllArgsConstructor
-public class PrijavaKey implements Serializable{
-	@Column(name = "vrijemePrijave")
-	private Date vrijemePrijave;
+public class PrijavaKey implements Serializable{	
 	@Column(name = "idKorisnika")
 	private int idKorisnika;
+	@Column(name = "vrijemePrijave")
+	private Date vrijemePrijave;
 	public Date getVrijemePrijave() {
 		return vrijemePrijave;
 	}
