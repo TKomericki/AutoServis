@@ -50,6 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/ispis").authenticated()
+                .antMatchers("/serviserregistration").hasAuthority("ADMIN")
                 .antMatchers("/popravak").hasAuthority("KORISNIK")
                 .antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().csrf().disable().formLogin()

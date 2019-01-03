@@ -21,97 +21,128 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @RequestMapping(value={"/login"}, method = RequestMethod.GET)
-    public ModelAndView login(){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
-        return modelAndView;
-    }
+	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
+	public ModelAndView login() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("login");
+		return modelAndView;
+	}
 
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
+	public ModelAndView registration() {
+		ModelAndView modelAndView = new ModelAndView();
+		User user = new User();
+		modelAndView.addObject("user", user);
+		modelAndView.setViewName("registration");
+		return modelAndView;
+	}
 
-    @RequestMapping(value="/registration", method = RequestMethod.GET)
-    public ModelAndView registration(){
-        ModelAndView modelAndView = new ModelAndView();
-        User user = new User();
-        modelAndView.addObject("user", user);
-        modelAndView.setViewName("registration");
-        return modelAndView;
-    }
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView();
+		User userExists = userService.findUserByEmail(user.getEmail());
+		if (userExists != null) {
+			bindingResult.rejectValue("email", "error.user",
+					"There is already a user registered with the email provided");
+		}
+		if (bindingResult.hasErrors()) {
+			modelAndView.setViewName("registration");
+		} else {
+			userService.saveUser(user);
+			modelAndView.addObject("successMessage", "User has been registered successfully");
+			modelAndView.addObject("user", new User());
+			modelAndView.setViewName("registration");
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
-        User userExists = userService.findUserByEmail(user.getEmail());
-        if (userExists != null) {
-            bindingResult
-                    .rejectValue("email", "error.user",
-                            "There is already a user registered with the email provided");
-        }
-        if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("registration");
-        } else {
-            userService.saveUser(user);
-            modelAndView.addObject("successMessage", "User has been registered successfully");
-            modelAndView.addObject("user", new User());
-            modelAndView.setViewName("registration");
+		}
+		return modelAndView;
+	}
 
-        }
-        return modelAndView;
-    }
+	@RequestMapping(value = "/serviserregistration", method = RequestMethod.GET)
+	public ModelAndView serviserRegistration() {
+		ModelAndView modelAndView = new ModelAndView();
+		User serviser = new User();
+		modelAndView.addObject("serviser", serviser);
+		modelAndView.setViewName("serviserregistration");
+		return modelAndView;
+	}
 
-    @RequestMapping(value="/admin/home", method = RequestMethod.GET)
-    public ModelAndView home(){
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.isAuthenticated() + " " + auth.getAuthorities());
-        User user = userService.findUserByEmail(auth.getName());
-        modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-        modelAndView.setViewName("admin/home");
-        return modelAndView;
-    }
-    
-    @RequestMapping(value={"/", "/pocetna"}, method = RequestMethod.GET)
-    public ModelAndView pocetna(){
-    	//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //System.out.println(auth.isAuthenticated() + " " + auth.getAuthorities());
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("pocetna");
-        return modelAndView;
-    }
-    
-    @RequestMapping(value={"/ispis"}, method = RequestMethod.GET)
-    public ModelAndView ispis(){
-    	ModelAndView modelAndView = new ModelAndView();
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	User user = userService.findUserByEmail(auth.getName());
-    	Set<User> users = new HashSet<>();
-    	Set<Prijava> prijave = new HashSet<>();
-    	for(GrantedAuthority authority : auth.getAuthorities()) {
-    		if(authority.getAuthority().equals("ADMIN")) users.addAll(userService.getAllUsers());
-    		else if(authority.getAuthority().equals("KORISNIK")) prijave.addAll(userService.getUserPrijave(user.getId()));
-    	}
-    	modelAndView.addObject("users", users);
-    	modelAndView.addObject("prijave", prijave); 
-        modelAndView.setViewName("ispis");
-        return modelAndView;
-    }
-    
-    @RequestMapping(value={"/error"}, method = RequestMethod.GET)
-    public ModelAndView error(){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("error");
-        return modelAndView;
-    }
-    
-    @RequestMapping(value={"/popravak"}, method = RequestMethod.GET)
-    public ModelAndView popravak(){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("popravak");
-        return modelAndView;
-    }
+	@RequestMapping(value = "/serviserregistration", method = RequestMethod.POST)
+	public ModelAndView creatNewServiser(@Valid User serviser, BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView();
+		User postojeciServiser = userService.findUserByEmail(serviser.getEmail());
+		if (postojeciServiser != null) {
+			bindingResult.rejectValue("email", "error.serviser",
+					"There is already a serviser registered with the email provided");
+		}
+
+		if (bindingResult.hasErrors()) {
+			modelAndView.setViewName("serviserregistration");
+		} else {
+			userService.saveUser(serviser);
+			modelAndView.addObject("successMessage", "Serviser has been registered successfully");
+			modelAndView.addObject("serviser", new User());
+			modelAndView.setViewName("serviserregistration");
+		}
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
+	public ModelAndView home() {
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(auth.isAuthenticated() + " " + auth.getAuthorities());
+		User user = userService.findUserByEmail(auth.getName());
+		modelAndView.addObject("userName",
+				"Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
+		modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
+		modelAndView.setViewName("admin/home");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = { "/", "/pocetna" }, method = RequestMethod.GET)
+	public ModelAndView pocetna() {
+		// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		// System.out.println(auth.isAuthenticated() + " " + auth.getAuthorities());
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("pocetna");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = { "/ispis" }, method = RequestMethod.GET)
+	public ModelAndView ispis() {
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.findUserByEmail(auth.getName());
+		Set<User> users = new HashSet<>();
+		Set<Prijava> prijave = new HashSet<>();
+		for (GrantedAuthority authority : auth.getAuthorities()) {
+			if (authority.getAuthority().equals("ADMIN"))
+				users.addAll(userService.getAllUsers());
+			else if (authority.getAuthority().equals("KORISNIK"))
+				prijave.addAll(userService.getUserPrijave(user.getId()));
+		}
+		modelAndView.addObject("users", users);
+		modelAndView.addObject("prijave", prijave);
+		modelAndView.setViewName("ispis");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = { "/error" }, method = RequestMethod.GET)
+	public ModelAndView error() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("error");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = { "/popravak" }, method = RequestMethod.GET)
+	public ModelAndView popravak() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("popravak");
+		return modelAndView;
+	}
 
 }
