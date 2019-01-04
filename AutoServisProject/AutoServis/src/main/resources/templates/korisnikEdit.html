@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Korisnik</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body class="bg-light">
+
+<div class="container">
+        <div class="py-5 text-center">
+            <a href="pocetna">
+                <img th:src="@{/images/AutoServis.png}" width="72" height="72" alt=""/>
+            </a>
+            <h2>Korisnik</h2>
+            <p class="lead">Izmjeni podatke o korisniku</p>
+        </div>
+    <div class="row">
+	
+        <div class="col-md-8 order-md-1">
+            <form autocomplete="off" action="#" th:action="@{/registration}"
+                  th:object="${user}" method="post" class="form-horizontal"
+                  role="form">
+            
+			<h4 class="mb-3">Ispunite polja:</h4>
+
+            <div class="row">
+                <!--<div class="form-group">-->
+                    <div class="col-md-6 mb-3">
+                        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                               class="validation-message"></label>
+                        <input type="text" th:field="*{name}" placeholder="Name"
+                               class="form-control"/>
+                    </div>
+                <!--</div>-->
+
+                <!--<div class="form-group">-->
+                    <div class="col-md-6 mb-3">
+                        <label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+                               class="validation-message"></label>
+                        <input type="text" th:field="*{lastName}"
+                               placeholder="Last Name" class="form-control"/>
+                    </div>
+                <!--</div>-->
+            </div>
+                
+                    <div class="mb-3">
+                        <input type="text" th:field="*{email}" placeholder="Email"
+                               class="form-control"/> <label
+                            th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                            class="validation-message"></label>
+                    </div>
+                
+                
+                    <div class="mb-3">
+                        <input type="password" th:field="*{password}"
+                               placeholder="Password" class="form-control"/> <label
+                            th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                            class="validation-message"></label>
+                    </div>
+                
+                
+                    <div class="mb-3">
+                        <input type="text" th:field="*{brojTelefona}"
+                               placeholder="broj Telefona" class="form-control"/> <label
+                            th:if="${#fields.hasErrors('brojTelefona')}" th:errors="*{brojTelefona}"
+                            class="validation-message"></label>
+                    </div>
+                
+
+                <div class="row">
+                
+                    <div class="col-md-5 mb-3">
+                        <input type="text" th:field="*{tipVozila}"
+                               placeholder="tip Vozila" class="form-control"/> <label
+                            th:if="${#fields.hasErrors('tipVozila')}" th:errors="*{tipVozila}"
+                            class="validation-message"></label>
+                    </div>
+                
+                
+                    <div class="col-md-4 mb-3">
+                        <select th:field="*{godinaProizvodnje}"
+                               placeholder="godina Proizvodnje" class="form-control"> <label
+                            th:if="${#fields.hasErrors('godinaProizvodnje')}" th:errors="*{godinaProizvodnje}"
+                            class="validation-message"></label>
+                            <!--<option value=" ">Odabir...</option>-->
+                            <option value="2018">2018</option>
+				            <option value="2017">2017</option>
+				            <option value="2016">2016</option>
+				            <option value="2015">2015</option>
+				            <option value="2014">2014</option>
+				            <option value="2013">2013</option>
+				            <option value="2012">2012</option>
+				            <option value="2011">2011</option>
+				            <option value="2010">2010</option>
+				            <option value="2009">2009</option>
+				            <option value="2008">2008</option>
+                            <option value="2007">2007</option>
+                            <option value="2006">2006</option>
+                            <option value="2005">2005</option>
+                            <option value="2004">2004</option>
+                            <option value="2003">2003</option>
+                            <option value="2002">2002</option>
+                            <option value="2001">2001</option>
+                            <option value="2000">2000</option>
+                        </select>
+                    </div>
+                
+                    
+                    <div class="col-md-3 mb-3">
+                        <input type="text" th:field="*{registracija}"
+                               placeholder="registracija" class="form-control"/> <label
+                            th:if="${#fields.hasErrors('registracija')}" th:errors="*{registracija}"
+                            class="validation-message"></label>
+                    </div>
+                
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Spremi izmjene</button>
+
+                <a href="pocetnaLogin" class="btn btn-default">Odustani od izmjena.</a>
+                <h2><span class="text-success" th:utext="${successMessage}"></span></h2>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/holder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="index.ico">
+
+    <title>PrijavaVozila</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}">
+  </head>
+
+  <body class="bg-light">
+
+    <div class="container">
+      <div class="py-5 text-center">
+        <a href="pocetna">
+			<img class="d-block mx-auto mb-4" th:src="@{/images/AutoServis.png}" alt="" width="72" height="72">
+		</a>
+        <h2>Prijava Vozila na Popravak</h2>
+        <p class="lead">Izmjenite podatke prijave</p>
+      </div>
+
+      <div class="row">
+        
+        <div class="col-md-8 order-md-1">
+          <h4 class="mb-3">Ispunite polja:</h4>
+          
+		  <form class="needs-validation" novalidate>
+		  
+			<hr class="mb-4">
+			
+			<div class="container">
+			
+				<div class="row">
+			
+					<div class="col-md-7 mb-3">
+					<label for="serviser">Serviser</label>
+					
+					<select class="custom-select d-block w-100" id="serviser" >
+					  <option value="">Odabir...</option>
+					  <option>serviser1???</option>
+					</select>
+				  </div>
+			  
+			  </div>
+			  
+			  <hr class="mb-4">
+              
+			  <div class="container" id="containerNoLeftPadding">
+			  
+                <label for="vrijemeDolaska">Vrijeme dolaska:</label>
+				
+				<!-- To group radio buttons they must all have the same name value. 
+				This allows only one to be selected at a time and applies required to the whole group. -->
+                
+				<label class="RadioContainer">Datum1
+					<input type="radio" name="datum" value="1" required>
+					<span class="checkmark"></span>
+				</label>
+				
+				<label class="RadioContainer">Datum2
+					<input type="radio" name="datum" value="2">
+					<span class="checkmark"></span>
+				</label>
+				
+				<div class="invalid-feedback">
+                  Odabir vremena dolaska obavezan.
+                </div>
+				
+				
+              </div>
+			  
+			  <hr class="mb-4">
+			  
+			  <div class="container" id="containerNoLeftPadding">
+			  
+				<div class="container" id="containerNoLeftPadding">
+			  
+					<label for="usluge">Usluge:</label>
+					
+					<label class="CheckContainer">One
+					  <input type="checkbox">
+					  <span class="checkmark"></span>
+					</label>
+
+					<label class="CheckContainer">Two
+					  <input type="checkbox">
+					  <span class="checkmark"></span>
+					</label>
+					
+				</div>
+				  
+				<div class="container" id="containerNoLeftPadding">
+				  
+					<div class="form-group">
+					  <label for="comment">Dodatne usluge:</label>
+					  <textarea class="form-control" rows="5" id="comment"></textarea>
+					</div> 
+					
+				</div>
+				  
+			  </div>
+			  
+			  <hr class="mb-4">
+			  
+			  <div class="container" id="containerNoLeftPadding">
+			  
+                <div class="row">
+              
+					<div class="col-md-7 mb-3">
+						<label for="rezervnoVozilo">Rezervno vozilo:</label>
+						
+						<select class="custom-select d-block w-100" id="serviser" >
+						  <option value="">Odabir...</option>
+						  <option>vozilo1???</option>
+						</select>
+					</div>
+				</div>
+				
+              </div>
+				
+			  
+            </div>
+			
+            <hr class="mb-4">
+            
+			<button class="btn btn-primary btn-lg btn-block" type="submit">Spremi izmjene</button>
+			
+          </form>
+        </div>
+      </div>
+
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017-2018 AutoServis</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+      </footer>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/holder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+	
+  </body>
+</html>
