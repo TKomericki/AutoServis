@@ -1,5 +1,6 @@
 package opp.controller;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -179,13 +180,24 @@ public class LoginController {
         return modelAndView;
     }
     
-    /*@RequestMapping(value= {"/editPrijava"}, method = RequestMethod.POST)
-    public ModelAndView editPrijava(@RequestParam PrijavaKey prijavaKey) {
+    @RequestMapping(value= {"/editPrijava"}, method = RequestMethod.GET)
+    public ModelAndView editPrijava(@RequestParam int id, @RequestParam Date vrijeme) {
     	ModelAndView modelAndView = new ModelAndView();
-    	Optional<Prijava> prijava = userService.findPrijavaByPrijavaKey(prijavaKey);
+    	Optional<Prijava> prijava = userService.findPrijavaByPrijavaKey(new PrijavaKey(id, vrijeme));
     	if(prijava.isPresent()) modelAndView.addObject("prijava", prijava.get());
-        modelAndView.setViewName("proba2");
+    	modelAndView.setViewName("editPrijava");
+    	System.out.println(prijava.isPresent());
+        System.out.println( prijava.get().isZavrseno() + " " + prijava.get().getIdServisera());
+    	return modelAndView;
+    }
+        
+    @RequestMapping(value = {"/editKorisnik"}, method = RequestMethod.GET) 
+    public ModelAndView editKorisnik(@RequestParam String email) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	User postojeciKorisnik = userService.findUserByEmail(email);
+        modelAndView.addObject("postojeciKorisnik", postojeciKorisnik);
+        modelAndView.setViewName("editKorisnik");
         return modelAndView;
-    }*/
+    }
 
 }
