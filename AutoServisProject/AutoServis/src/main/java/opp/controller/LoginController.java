@@ -1,7 +1,9 @@
 package opp.controller;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -161,7 +164,39 @@ public class LoginController {
     @RequestMapping(value={"/popravak"}, method = RequestMethod.GET)
     public ModelAndView popravak(){
         ModelAndView modelAndView = new ModelAndView();
+        User odabraniServiser = new User();
+        modelAndView.addObject("odabraniServiser", odabraniServiser);
+        modelAndView.addObject("serviseri", userService.getAllServiseri());
         modelAndView.setViewName("popravak");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value= {"/popravak"}, method = RequestMethod.POST)
+    public ModelAndView popravak(@RequestParam String email) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	User serviser = userService.findUserByEmail(email);
+    	modelAndView.addObject("serviser", serviser);
+        modelAndView.setViewName("proba");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value= {"/editPrijava"}, method = RequestMethod.GET)
+    public ModelAndView editPrijava(@RequestParam int id, @RequestParam Date vrijeme) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	Optional<Prijava> prijava = userService.findPrijavaByPrijavaKey(new PrijavaKey(id, vrijeme));
+    	if(prijava.isPresent()) modelAndView.addObject("prijava", prijava.get());
+    	modelAndView.setViewName("editPrijava");
+    	System.out.println(prijava.isPresent());
+        System.out.println( prijava.get().isZavrseno() + " " + prijava.get().getIdServisera());
+    	return modelAndView;
+    }
+        
+    @RequestMapping(value = {"/editKorisnik"}, method = RequestMethod.GET) 
+    public ModelAndView editKorisnik(@RequestParam String email) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	User postojeciKorisnik = userService.findUserByEmail(email);
+        modelAndView.addObject("postojeciKorisnik", postojeciKorisnik);
+        modelAndView.setViewName("editKorisnik");
         return modelAndView;
     }
 

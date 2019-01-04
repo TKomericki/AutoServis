@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service("userService")
@@ -36,6 +38,10 @@ public class UserService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+    
+    public Optional<Prijava> findPrijavaByPrijavaKey(PrijavaKey prijavaKey) {
+    	return prijavaRepository.findById(prijavaKey);
+    }
 
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -44,11 +50,29 @@ public class UserService {
         return userRepository.save(user);
     }
     
+    public User saveServiser(User serviser) {
+        serviser.setPassword(bCryptPasswordEncoder.encode(serviser.getPassword()));
+        serviser.setActive(1);
+        serviser.setRole("SERVISER");
+        return userRepository.save(serviser);
+    }
+    
     public Set<User> getAllUsers(){
     	Set<User> users = new HashSet<>();
     	users.addAll(userRepository.findAll());
     	users.removeIf(r -> r.getRole().equals("ADMIN"));
     	return users;
+    }
+    
+    public Set<User> getAllServiseri(){
+    	Set<User> serviseri = new HashSet<>();
+    	serviseri.addAll(userRepository.findAll());
+    	serviseri.removeIf(r -> !r.getRole().equals("SERVISER"));
+    	return serviseri;
+    }
+    
+    public List<RadnoVrijeme> getAllRadnaVremena(){
+    	return radnoVrijemeRepository.findAll();
     }
     
     public Set<Prijava> getUserPrijave(int user_id){
