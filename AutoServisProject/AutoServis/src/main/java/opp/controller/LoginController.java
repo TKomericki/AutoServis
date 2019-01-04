@@ -2,6 +2,7 @@ package opp.controller;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -161,8 +163,29 @@ public class LoginController {
     @RequestMapping(value={"/popravak"}, method = RequestMethod.GET)
     public ModelAndView popravak(){
         ModelAndView modelAndView = new ModelAndView();
+        User odabraniServiser = new User();
+        modelAndView.addObject("odabraniServiser", odabraniServiser);
+        modelAndView.addObject("serviseri", userService.getAllServiseri());
         modelAndView.setViewName("popravak");
         return modelAndView;
     }
+    
+    @RequestMapping(value= {"/popravak"}, method = RequestMethod.POST)
+    public ModelAndView popravak(@RequestParam String email) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	User serviser = userService.findUserByEmail(email);
+    	modelAndView.addObject("serviser", serviser);
+        modelAndView.setViewName("proba");
+        return modelAndView;
+    }
+    
+    /*@RequestMapping(value= {"/editPrijava"}, method = RequestMethod.POST)
+    public ModelAndView editPrijava(@RequestParam PrijavaKey prijavaKey) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	Optional<Prijava> prijava = userService.findPrijavaByPrijavaKey(prijavaKey);
+    	if(prijava.isPresent()) modelAndView.addObject("prijava", prijava.get());
+        modelAndView.setViewName("proba2");
+        return modelAndView;
+    }*/
 
 }

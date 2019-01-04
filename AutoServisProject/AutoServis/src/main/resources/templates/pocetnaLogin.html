@@ -88,6 +88,7 @@
 							<td><span th:text="${user.getEmail()}"></span></td>
 							<td><span th:text="${user.getName()}"></span></td>
 							<td><span th:text="${user.getLastName()}"></span></td>
+							<td><a th:href="@{'editKorisnik?email=' + ${user.getEmail()}}" class="btn btn-primary my-2">Edit</a></td>
 						</tr>
 					  </tbody>
 					</table>
@@ -109,6 +110,9 @@
 							<td><span th:text="${prijava.getIdServisera()}"></span></td>
 							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
 							<td><span th:text="${prijava.isZavrseno()}"></span></td>
+							<td>							
+								<a th:href="@{/editPrijava(id=${prijava.getPrijavaKey().getIdKorisnika()},vrijeme=${prijava.getPrijavaKey().getVrijemePrijave()})}">Edit</a>    
+          					</td>
 						</tr>
 					  </tbody>
 					</table>
