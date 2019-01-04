@@ -1,10 +1,9 @@
 package opp.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
@@ -31,6 +30,14 @@ public class Usluga {
 	@Column(name = "cijena_usluge")
 	@NotEmpty
 	private int cijena;
+	
+	@ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "Usluga_prijava", 
+        joinColumns = { @JoinColumn(name = "id_usluge") }, 
+        inverseJoinColumns = { @JoinColumn(name = "idKOrisnika"), @JoinColumn(name = "vrijemePrijave" )}
+    )
+    Set<Prijava> prijave = new HashSet<>();
 
 	public int getIdUsluge() {
 		return idUsluge;

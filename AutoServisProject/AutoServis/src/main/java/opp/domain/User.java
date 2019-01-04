@@ -119,4 +119,12 @@ public class User {
 	public int getId() {
 		return this.id;
 	}
+	public String getIdRadnogVremena() {
+		return idRadnogVremena;
+	}
+	public void setIdRadnogVremena(String idRadnogVremena) {
+		this.idRadnogVremena = idRadnogVremena;
+	}
+	
+	
 }

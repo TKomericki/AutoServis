@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -39,8 +40,11 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
     
-    public Optional<Prijava> findPrijavaByPrijavaKey(PrijavaKey prijavaKey) {
-    	return prijavaRepository.findById(prijavaKey);
+    public Optional<Prijava> findPrijavaByPrijavaKey(int id, Timestamp vrijeme) {
+    	Set<Prijava> prijave = new HashSet<>();
+    	prijave.addAll(prijavaRepository.findAll());
+    	prijave.removeIf(s -> s.getPrijavaKey().getIdKorisnika() == id && s.getPrijavaKey().getVrijemePrijave().equals(vrijeme));
+    	return prijave.stream().findFirst();
     }
 
     public User saveUser(User user) {
@@ -75,6 +79,10 @@ public class UserService {
     	return radnoVrijemeRepository.findAll();
     }
     
+    public List<Usluga> getAllUsluge(){
+    	return uslugaRepository.findAll();
+    }
+    
     public Set<Prijava> getUserPrijave(int user_id){
     	Set<Prijava> prijave = new HashSet<>();
     	prijave.addAll(prijavaRepository.findAll());
@@ -94,5 +102,10 @@ public class UserService {
     	zamjenskaVozila.addAll(zamjenskoVoziloRepository.findAll());
     	zamjenskaVozila.removeIf(s -> s.getIdKorisnik() != null);
     	return zamjenskaVozila;
+    }
+    
+    public Optional<RadnoVrijeme> getRadnoVrijeme(String idRadnogVremena){
+    	Optional<RadnoVrijeme> radnoVrijeme = radnoVrijemeRepository.findById(Integer.parseInt(idRadnogVremena));
+    	return radnoVrijeme;
     }
 }

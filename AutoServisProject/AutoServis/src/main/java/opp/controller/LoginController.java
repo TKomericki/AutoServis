@@ -1,11 +1,19 @@
 package opp.controller;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.validation.Valid;
 
 import opp.domain.*;
@@ -174,20 +182,51 @@ public class LoginController {
     @RequestMapping(value= {"/popravak"}, method = RequestMethod.POST)
     public ModelAndView popravak(@RequestParam String email) {
     	ModelAndView modelAndView = new ModelAndView();
+    	Prijava prijava = new Prijava();
+    	Set<LocalDate> datumi = new HashSet<>();
+    	LocalDateTime date = LocalDateTime.now();
+    	Set<ZamjenskoVozilo> zamjenskaVozila = userService.getSlobodnaVozila();
+    	//System.out.println(date);
+    	if(email.equals(null)) {
+    		modelAndView.setViewName("popravak2");
+            return modelAndView;
+    	}
     	User serviser = userService.findUserByEmail(email);
-    	modelAndView.addObject("serviser", serviser);
-        modelAndView.setViewName("proba");
+    	//modelAndView.addObject("serviser", serviser);   	
+    	prijava.setIdServisera(serviser.getId());
+    	RadnoVrijeme radnoVrijeme = userService.getRadnoVrijeme(serviser.getIdRadnogVremena()).get();
+    	
+    	List<LocalTime> vremena = new LinkedList<>();
+    	vremena.add(radnoVrijeme.getPonedjeljakPocetak());
+    	vremena.add(radnoVrijeme.getUtorakPocetak());
+    	vremena.add(radnoVrijeme.getSrijedaPocetak());
+    	vremena.add(radnoVrijeme.getCetvrtakPocetak());
+    	vremena.add(radnoVrijeme.getPetakPocetak());
+    	for(int i = 1; i <= 10; i++) {
+    		LocalDateTime newDate = date.plusDays(i);
+    		int day = newDate.getDayOfWeek().getValue();
+    		if(day < 6) {
+    			if(vremena.get(day - 1).getHour() == 7) datumi.add(newDate.toLocalDate());    			
+    		}    		
+    	}
+    	modelAndView.addObject("usluge", userService.getAllUsluge());
+    	modelAndView.addObject("datumi", datumi);
+    	//User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    	modelAndView.addObject("prijava", prijava);
+    	modelAndView.addObject("zamjenskaVozila", zamjenskaVozila);
+        modelAndView.setViewName("popravak2");
         return modelAndView;
     }
     
     @RequestMapping(value= {"/editPrijava"}, method = RequestMethod.GET)
-    public ModelAndView editPrijava(@RequestParam int id, @RequestParam Date vrijeme) {
+    public ModelAndView editPrijava(@RequestParam int id, @RequestParam Timestamp vrijeme) {    	
+    	System.out.println(id + " " + vrijeme);
     	ModelAndView modelAndView = new ModelAndView();
-    	Optional<Prijava> prijava = userService.findPrijavaByPrijavaKey(new PrijavaKey(id, vrijeme));
+    	Optional<Prijava> prijava = userService.findPrijavaByPrijavaKey(id, vrijeme);
     	if(prijava.isPresent()) modelAndView.addObject("prijava", prijava.get());
-    	modelAndView.setViewName("editPrijava");
-    	System.out.println(prijava.isPresent());
-        System.out.println( prijava.get().isZavrseno() + " " + prijava.get().getIdServisera());
+    	//System.out.println(prijava.isPresent());
+        //System.out.println( prijava.get().isZavrseno() + " " + prijava.get().getIdServisera());
+    	modelAndView.setViewName("popravakEdit");
     	return modelAndView;
     }
         
@@ -195,9 +234,9 @@ public class LoginController {
     public ModelAndView editKorisnik(@RequestParam String email) {
     	ModelAndView modelAndView = new ModelAndView();
     	User postojeciKorisnik = userService.findUserByEmail(email);
+    	System.out.println(postojeciKorisnik.getPassword());
         modelAndView.addObject("postojeciKorisnik", postojeciKorisnik);
-        modelAndView.setViewName("editKorisnik");
+        modelAndView.setViewName("korisnikEdit");
         return modelAndView;
     }
-
 }

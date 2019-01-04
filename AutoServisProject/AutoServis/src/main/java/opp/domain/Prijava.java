@@ -10,8 +10,10 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import java.util.Date;
 import java.util.Set;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -26,27 +28,30 @@ public class Prijava {
 	@Column(name = "idServisera")
 	private int idServisera;
 	@Column(name = "vrijemeDolaska")
-	private Date vrijemeDolaska;
+	private LocalDate vrijemeDolaska;
 	@Column(name = "preuzeto")
 	private boolean preuzeto;
 	@Column(name = "zavrseno")
 	private boolean zavrseno;
 	@Column(name = "vrijemeZavrsetka")
-	private Date vrijemeZavrsetka;
+	private Timestamp vrijemeZavrsetka;
 	@Column(name = "dodatniZahtjevi")
 	private String dodatniZahtjevi;
-	@Column(name = "idZamjensko")
-	private int idZamjensko;
+	@Column(name = "regZamjensko")
+	private String regZamjensko;
+	@ManyToMany(mappedBy = "prijave")
+	private Set<Usluga> usluge;
+	
 	public int getIdServisera() {
 		return idServisera;
 	}
 	public void setIdServisera(int idServisera) {
 		this.idServisera = idServisera;
 	}
-	public Date getVrijemeDolaska() {
+	public LocalDate getVrijemeDolaska() {
 		return vrijemeDolaska;
 	}
-	public void setVrijemeDolaska(Date vrijemeDolaska) {
+	public void setVrijemeDolaska(LocalDate vrijemeDolaska) {
 		this.vrijemeDolaska = vrijemeDolaska;
 	}
 	public boolean isPreuzeto() {
@@ -61,10 +66,10 @@ public class Prijava {
 	public void setZavrseno(boolean zavrseno) {
 		this.zavrseno = zavrseno;
 	}
-	public Date getVrijemeZavrsetka() {
+	public Timestamp getVrijemeZavrsetka() {
 		return vrijemeZavrsetka;
 	}
-	public void setVrijemeZavrsetka(Date vrijemeZavrsetka) {
+	public void setVrijemeZavrsetka(Timestamp vrijemeZavrsetka) {
 		this.vrijemeZavrsetka = vrijemeZavrsetka;
 	}
 	public String getDodatniZahtjevi() {
@@ -73,11 +78,11 @@ public class Prijava {
 	public void setDodatniZahtjevi(String dodatniZahtjevi) {
 		this.dodatniZahtjevi = dodatniZahtjevi;
 	}
-	public int getIdZamjensko() {
-		return idZamjensko;
+	public String getRegZamjensko() {
+		return regZamjensko;
 	}
-	public void setIdZamjensko(int idZamjensko) {
-		this.idZamjensko = idZamjensko;
+	public void setIdZamjensko(String regZamjensko) {
+		this.regZamjensko = regZamjensko;
 	}
 	public PrijavaKey getPrijavaKey() {
 		return prijavaKey;

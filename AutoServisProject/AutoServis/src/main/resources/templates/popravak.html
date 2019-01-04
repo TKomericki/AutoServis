@@ -35,7 +35,9 @@
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Proizvoljan odabir servisera:</h4>
           
-		  <form class="needs-validation" novalidate>
+		  <form autocomplete="off" th:action="@{/popravak}"
+                  th:object="${odabraniServiser}" method="post"
+                  role="form" class="needs-validation" novalidate>
 		  
 		  <hr class="mb-4">
 			
@@ -44,9 +46,9 @@
 			  <div class="col-md-7 mb-3">
                 <label for="serviser">Serviser</label>
                 
-				<select class="custom-select d-block w-100" id="serviser" >
+				<select th:field="*{email}" class="custom-select d-block w-100" id="serviser" >
                   <option value="">Odabir...</option>
-                  <option>serviser1???</option>
+                  <option th:each="serviser : ${serviseri}" th:value="${serviser.getEmail()}" th:text="${serviser.getName()} + ' ' + ${serviser.getLastName()}"></option>
                 </select>
               </div>
             </div>
