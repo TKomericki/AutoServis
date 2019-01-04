@@ -81,10 +81,21 @@ public class Prijava {
 	public String getRegZamjensko() {
 		return regZamjensko;
 	}
-	public void setIdZamjensko(String regZamjensko) {
+	public void setRegZamjensko(String regZamjensko) {
 		this.regZamjensko = regZamjensko;
 	}
 	public PrijavaKey getPrijavaKey() {
 		return prijavaKey;
 	}
+	
+	public void setPrijavaKey(PrijavaKey prijavaKey) {
+		this.prijavaKey = prijavaKey;
+	}
+	public Set<Usluga> getUsluge() {
+		return usluge;
+	}
+	public void setUsluge(Set<Usluga> usluge) {
+		this.usluge = usluge;
+	}
+	
 }

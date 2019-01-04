@@ -58,4 +58,13 @@ public class Usluga {
 	public void setCijena(int cijena) {
 		this.cijena = cijena;
 	}
+
+	public Set<Prijava> getPrijave() {
+		return prijave;
+	}
+
+	public void setPrijave(Set<Prijava> prijave) {
+		this.prijave = prijave;
+	}
+	
 }

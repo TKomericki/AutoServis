@@ -35,7 +35,8 @@
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Ispunite polja:</h4>
           
-		  <form class="needs-validation" novalidate>
+		  <form class="needs-validation" novalidate autocomplete="off" th:action="@{/prijavaPopravka}"
+                  th:object="${prijava}" method="post" role="form">
 		  
 			<hr class="mb-4">
 			
@@ -49,7 +50,7 @@
 				This allows only one to be selected at a time and applies required to the whole group. -->
                 <div class="container" th:each="datum : ${datumi}">
 				<label class="RadioContainer">
-					<input type="radio" name="datum" th:value="${datum}" th:text="${datum}" required>
+					<input type="radio" name="datum" th:field="*{vrijemeDolaska}" th:value="${datum}" th:text="${datum}" required>
 					<span class="checkmark"></span>
 				</label>
 				</div>
@@ -72,7 +73,7 @@
 					
 					<div class="container" th:each="usluga : ${usluge}">
 					<label class="CheckContainer">
-					  <input type="checkbox" th:value="${usluga}" th:text="${usluga.getImeUsluge()}">
+					  <input type="checkbox" th:field="*{usluge}" th:value="${usluga.getIdUsluge()}" th:text="${usluga.getImeUsluge()}">
 					  <span class="checkmark"></span>
 					</label>
 					</div>
@@ -83,7 +84,7 @@
 				  
 					<div class="form-group">
 					  <label for="comment">Dodatne usluge:</label>
-					  <textarea class="form-control" rows="5" id="comment"></textarea>
+					  <textarea class="form-control" th:field="*{dodatniZahtjevi}" rows="5" id="comment"></textarea>
 					</div> 
 					
 				</div>
@@ -99,7 +100,7 @@
 					<div class="col-md-7 mb-3">
 						<label for="rezervnoVozilo">Rezervno vozilo:</label>
 						
-						<select class="custom-select d-block w-100" id="serviser" >
+						<select class="custom-select d-block w-100" id="serviser" th:field="*{regZamjensko}" >
 						  <option value="">Odabir...</option>
 						  <option th:each="vozilo : ${zamjenskaVozila}" th:value="${vozilo.getRegistracijskaOznakaVozila()}" th:text="${vozilo.getTipVozila()} + ' ' + ${vozilo.getGodinaProizvodnje()}"></option>
 						</select>
@@ -110,7 +111,7 @@
 				
 			  
             </div>
-			
+			<textarea th:field="*{idServisera}" th:text="${prijava.getIdServisera()}" hidden></textarea>
             <hr class="mb-4">
             
 			<button class="btn btn-primary btn-lg btn-block" type="submit">Završi prijavu vozila</button>

@@ -54,6 +54,14 @@ public class UserService {
         return userRepository.save(user);
     }
     
+    public Prijava savePrijava(Prijava prijava) {
+    	for(Usluga usluga : prijava.getUsluge()) { 
+    		usluga.getPrijave().add(prijava);
+    		uslugaRepository.save(usluga);
+    	}
+    	return prijavaRepository.save(prijava);
+    }
+    
     public User saveServiser(User serviser) {
         serviser.setPassword(bCryptPasswordEncoder.encode(serviser.getPassword()));
         serviser.setActive(1);
@@ -104,8 +112,18 @@ public class UserService {
     	return zamjenskaVozila;
     }
     
+    public void zauzmiVozilo(int id, String reg){
+    	ZamjenskoVozilo vozilo = zamjenskoVoziloRepository.findById(reg).get();
+    	vozilo.setIdKorisnik(Integer.valueOf(id).toString());
+    	zamjenskoVoziloRepository.save(vozilo);
+    }
+    
     public Optional<RadnoVrijeme> getRadnoVrijeme(String idRadnogVremena){
     	Optional<RadnoVrijeme> radnoVrijeme = radnoVrijemeRepository.findById(Integer.parseInt(idRadnogVremena));
     	return radnoVrijeme;
+    }
+    
+    public Optional<Usluga> getUslugaById(int id){
+    	return uslugaRepository.findById(id);
     }
 }

@@ -179,21 +179,20 @@ public class LoginController {
         return modelAndView;
     }
     
-    @RequestMapping(value= {"/popravak"}, method = RequestMethod.POST)
+    @RequestMapping(value= {"/popravak2"}, method = RequestMethod.GET)
     public ModelAndView popravak(@RequestParam String email) {
     	ModelAndView modelAndView = new ModelAndView();
-    	Prijava prijava = new Prijava();
+    	PrijavaModel prijava = new PrijavaModel();
     	Set<LocalDate> datumi = new HashSet<>();
     	LocalDateTime date = LocalDateTime.now();
     	Set<ZamjenskoVozilo> zamjenskaVozila = userService.getSlobodnaVozila();
-    	//System.out.println(date);
     	if(email.equals(null)) {
     		modelAndView.setViewName("popravak2");
             return modelAndView;
     	}
     	User serviser = userService.findUserByEmail(email);
+    	//System.out.println(Integer.valueOf(serviser.getId()).toString() + " " + serviser.getName() + " " + serviser.getLastName());
     	//modelAndView.addObject("serviser", serviser);   	
-    	prijava.setIdServisera(serviser.getId());
     	RadnoVrijeme radnoVrijeme = userService.getRadnoVrijeme(serviser.getIdRadnogVremena()).get();
     	
     	List<LocalTime> vremena = new LinkedList<>();
@@ -209,12 +208,55 @@ public class LoginController {
     			if(vremena.get(day - 1).getHour() == 7) datumi.add(newDate.toLocalDate());    			
     		}    		
     	}
+    	prijava.setIdServisera(serviser.getId());
     	modelAndView.addObject("usluge", userService.getAllUsluge());
     	modelAndView.addObject("datumi", datumi);
     	//User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    	//System.out.println(user.getEmail());
     	modelAndView.addObject("prijava", prijava);
     	modelAndView.addObject("zamjenskaVozila", zamjenskaVozila);
         modelAndView.setViewName("popravak2");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value= {"/prijavaPopravka"}, method = RequestMethod.POST)
+    public ModelAndView prijavaPopravka(PrijavaModel prijavaModel) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	System.out.println(prijavaModel.getIdServisera() + " " + prijavaModel.getVrijemeDolaska() + "\n" + prijavaModel.getDodatniZahtjevi() + " " + prijavaModel.getRegZamjensko());
+    	/*for(Integer usluga : prijava.getUsluge()) {
+    		System.out.println(usluga);
+    	}*/
+    	User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    	Prijava prijava = new Prijava();
+    	prijava.setIdServisera(prijavaModel.getIdServisera());
+    	if(!prijavaModel.getRegZamjensko().isEmpty()) {
+    		prijava.setRegZamjensko(prijavaModel.getRegZamjensko());
+    		userService.zauzmiVozilo(user.getId(), prijavaModel.getRegZamjensko());
+    	}
+    	prijava.setPrijavaKey(new PrijavaKey());
+    	prijava.getPrijavaKey().setIdKorisnika(user.getId());
+    	prijava.getPrijavaKey().setVrijemePrijave(Timestamp.valueOf(LocalDateTime.now()));
+    	prijava.setPreuzeto(false);
+    	prijava.setZavrseno(false);
+    	prijava.setDodatniZahtjevi(prijavaModel.getDodatniZahtjevi());
+    	prijava.setVrijemeDolaska(LocalDate.parse(prijavaModel.getVrijemeDolaska()));
+    	Set<Usluga> usluge = new HashSet<>();
+    	for(int usluga : prijavaModel.getUsluge()) {
+    		usluge.add(userService.getUslugaById(usluga).get());
+    	}
+    	for(Usluga usluga : usluge) {
+    		System.out.println(usluga.getImeUsluge() + " " + usluga.getCijena());
+    	}
+    	prijava.setUsluge(usluge);
+    	prijava = userService.savePrijava(prijava);
+    	for(Usluga usluga : prijava.getUsluge()) {
+    		System.out.println(usluga.getImeUsluge() + " " + usluga.getCijena());
+    	}
+    	Set<Prijava> prijave = userService.getUserPrijave(user.getId());
+    	for(Prijava prijavica : prijave) {
+    		for(Usluga usluga : prijavica.getUsluge()) System.out.println(usluga.getImeUsluge() + " " + usluga.getCijena());
+    	}
+        modelAndView.setViewName("uspjeh");
         return modelAndView;
     }
     
