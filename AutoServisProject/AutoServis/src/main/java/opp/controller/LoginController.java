@@ -1,6 +1,7 @@
 package opp.controller;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -64,8 +65,11 @@ public class LoginController {
     @RequestMapping(value="/registracijaServisera", method = RequestMethod.GET)
     public ModelAndView serviserRegistration(){
         ModelAndView modelAndView = new ModelAndView();
+        List<RadnoVrijeme> radnaVremena = userService.getAllRadnaVremena();
+        System.out.println(radnaVremena.size());
         User serviser = new User();
-        modelAndView.addObject("serviser", serviser);
+        modelAndView.addObject("user", serviser);
+        modelAndView.addObject("radnaVremena", radnaVremena);
         modelAndView.setViewName("registracijaServisera");
         return modelAndView;
     }
@@ -78,10 +82,12 @@ public class LoginController {
             bindingResult.rejectValue("email", "error.serviser",
                             "There is already a serviser registered with the email provided");
         }
+        List<RadnoVrijeme> radnaVremena = userService.getAllRadnaVremena();
+    	modelAndView.addObject("radnaVremena", radnaVremena);
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("registracijaServisera");
         } else {
-            userService.saveUser(serviser);
+            userService.saveServiser(serviser);
             modelAndView.addObject("successMessage", "Serviser has been registered successfully");
             modelAndView.addObject("serviser", new User());
             modelAndView.setViewName("registracijaServisera");
@@ -106,7 +112,7 @@ public class LoginController {
     public ModelAndView pocetna(){
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	boolean isLoggedIn = !auth.getName().equals("anonymousUser");
-        //System.out.println(auth.isAuthenticated() + " " + auth.getName() + " " + isLoggedIn);
+        System.out.println(auth.isAuthenticated() + " " + auth.getName() + " " + isLoggedIn);
     	/*Set<Prijava> prijave = new HashSet<>();
     	prijave.addAll(userService.getUserPrijave(1));
     	for(Prijava prijava : prijave) {
@@ -128,14 +134,20 @@ public class LoginController {
     	User user = userService.findUserByEmail(auth.getName());
     	Set<User> users = new HashSet<>();
     	Set<Prijava> prijave = new HashSet<>();
+    	String role = "";
+    	
     	for(GrantedAuthority authority : auth.getAuthorities()) {
+    		role = authority.getAuthority();
     		if(authority.getAuthority().equals("ADMIN")) users.addAll(userService.getAllUsers());
     		else if(authority.getAuthority().equals("KORISNIK")) prijave.addAll(userService.getUserPrijave(user.getId()));
     		else if(authority.getAuthority().equals("SERVISER")) prijave.addAll(userService.getServiserPrijave(user.getId()));
     	}
+    	
     	modelAndView.addObject("users", users);
-    	modelAndView.addObject("prijave", prijave); 
-        modelAndView.setViewName("ispis");
+    	modelAndView.addObject("prijave", prijave);   	
+    	modelAndView.addObject("role", role);
+    	
+        modelAndView.setViewName("pocetnaLogin");
         return modelAndView;
     }
     

@@ -20,8 +20,8 @@
         </div>
     <div class="row">
         <div class="col-md-8 order-md-1">
-            <form autocomplete="off" action="#" th:action="@{/registration}"
-                  th:object="${serviser}" method="post" class="form-horizontal"
+            <form autocomplete="off" action="#" th:action="@{/registracijaServisera}"
+                  th:object="${user}" method="post" class="form-horizontal"
                   role="form">
             <h4 class="mb-3">Ispunite polja:</h4>
 
@@ -70,10 +70,9 @@
                 
 
                 <div class="container">
-                
-                    <div class="container" id="containerNoLeftPadding">
+                    <div class="container" id="containerNoLeftPadding" th:each="radnoVrijeme : ${radnaVremena}">
 					<label class="RadioContainer">One
-						<input type="radio" checked="checked" name="radio" value="1">
+						<input type="radio" th:field="*{idRadnogVremena}" name="radio" th:value="${radnoVrijeme.getIdRadnogVremena()}" required>
 						<span class="checkmark"></span>
 					</label>
 					
@@ -89,45 +88,15 @@
 					  </thead>
 					  <tbody>
 						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>Tea</td>
+						  <td><span th:text="${radnoVrijeme.getPonedjeljakPocetak()} + '-' + ${radnoVrijeme.getPonedjeljakKraj()}"></td>
+						  <td><span th:text="${radnoVrijeme.getUtorakPocetak()} + '-' + ${radnoVrijeme.getUtorakKraj()}"></span></td>
+						  <td><span th:text="${radnoVrijeme.getSrijedaPocetak()} + '-' + ${radnoVrijeme.getSrijedaKraj()}"></td>
+						  <td><span th:text="${radnoVrijeme.getCetvrtakPocetak()} + '-' + ${radnoVrijeme.getCetvrtakKraj()}"></td>
+						  <td><span th:text="${radnoVrijeme.getPetakPocetak()} + '-' + ${radnoVrijeme.getPetakKraj()}"></td>
 						</tr>
 					  </tbody>
 					</table>
 				
-				</div>
-				
-				
-				<div class="container" id="containerNoLeftPadding">
-					<label class="RadioContainer">Two
-						<input type="radio" name="radio" value="2">
-						<span class="checkmark"></span>
-					</label>
-					
-					<table class="table">
-					  <thead>
-						<tr>
-						  <th scope="col">Ponedjeljak</th>
-						  <th scope="col">Utorak</th>
-						  <th scope="col">Srijeda</th>
-						  <th scope="col">Četvrtak</th>
-						  <th scope="col">Petak</th>
-						</tr>
-					  </thead>
-					  <tbody>
-						<tr>
-						  <td>1</td>
-						  <td>Mark</td>
-						  <td>Otto</td>
-						  <td>@mdo</td>
-						  <td>Tea</td>
-						</tr>
-					  </tbody>
-					</table>
-					
 				</div>
                 
             </div>

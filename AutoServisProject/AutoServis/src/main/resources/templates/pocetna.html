@@ -46,7 +46,7 @@
       </div>
       <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container d-flex justify-content-between">
-          <a href="#" class="navbar-brand d-flex align-items-center">
+          <a href="pocetna" class="navbar-brand d-flex align-items-center">
             <strong>AutoServis</strong>
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,10 +62,14 @@
         <div class="container">
           <h1 class="jumbotron-heading">Auto Servis</h1>
           <p class="lead text-muted">Prijavite se ili registrirajte za korištenje usluga.</p>
-          <p>
+          <p th:if="${isLoggedIn}">
+            <a href="ispis" class="btn btn-primary my-2">Profile</a>
+            <a href="logout" class="btn btn-secondary my-2">Odjava</a>
+          </p>
+          <p th:unless="${isLoggedIn}">
             <a href="login" class="btn btn-primary my-2">Prijava</a>
             <a href="registration" class="btn btn-secondary my-2">Registracija</a>
-          </p>
+          </p>    
         </div>
       </section>
 
