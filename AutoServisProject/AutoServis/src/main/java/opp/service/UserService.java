@@ -40,11 +40,15 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
     
+    public User findUserById(int id) {
+    	return userRepository.findById(id).get();
+    }
+    
     public Optional<Prijava> findPrijavaByPrijavaKey(int id, Timestamp vrijeme) {
-    	Set<Prijava> prijave = new HashSet<>();
-    	prijave.addAll(prijavaRepository.findAll());
-    	prijave.removeIf(s -> s.getPrijavaKey().getIdKorisnika() == id && s.getPrijavaKey().getVrijemePrijave().equals(vrijeme));
-    	return prijave.stream().findFirst();
+    	PrijavaKey prijavaKey = new PrijavaKey();
+    	prijavaKey.setIdKorisnika(id);
+    	prijavaKey.setVrijemePrijave(vrijeme);
+    	return prijavaRepository.findById(prijavaKey);
     }
 
     public User saveUser(User user) {
@@ -60,6 +64,14 @@ public class UserService {
     		uslugaRepository.save(usluga);
     	}
     	return prijavaRepository.save(prijava);
+    }
+    
+    public Prijava replacePrijava(Prijava prijava, Prijava staraPrijava) {
+    	for(Usluga usluga : staraPrijava.getUsluge()) { 
+    		usluga.getPrijave().remove(staraPrijava);
+    		uslugaRepository.save(usluga);
+    	}
+    	return this.savePrijava(prijava);
     }
     
     public User saveServiser(User serviser) {
@@ -107,8 +119,10 @@ public class UserService {
     
     public Set<ZamjenskoVozilo> getSlobodnaVozila() {
     	Set<ZamjenskoVozilo> zamjenskaVozila = new HashSet<>();
-    	zamjenskaVozila.addAll(zamjenskoVoziloRepository.findAll());
-    	zamjenskaVozila.removeIf(s -> s.getIdKorisnik() != null);
+    	for(ZamjenskoVozilo vozilo : zamjenskoVoziloRepository.findAll()) {
+    		if(vozilo.getIdKorisnik() == null) zamjenskaVozila.add(vozilo);
+    	}
+    	//System.out.println(zamjenskaVozila.size());
     	return zamjenskaVozila;
     }
     
@@ -116,6 +130,16 @@ public class UserService {
     	ZamjenskoVozilo vozilo = zamjenskoVoziloRepository.findById(reg).get();
     	vozilo.setIdKorisnik(Integer.valueOf(id).toString());
     	zamjenskoVoziloRepository.save(vozilo);
+    }
+    
+    public void oslobodiVozilo(String reg){
+    	ZamjenskoVozilo vozilo = zamjenskoVoziloRepository.findById(reg).get();
+    	vozilo.setIdKorisnik(null);
+    	zamjenskoVoziloRepository.save(vozilo);
+    }
+    
+    public ZamjenskoVozilo getVoziloById(String reg) {
+    	return zamjenskoVoziloRepository.findById(reg).get();
     }
     
     public Optional<RadnoVrijeme> getRadnoVrijeme(String idRadnogVremena){

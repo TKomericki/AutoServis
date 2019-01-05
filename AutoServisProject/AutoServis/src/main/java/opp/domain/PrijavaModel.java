@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class PrijavaModel {
 	private int korisnikId;
+	private String vrijemePrijave;
 	private int idServisera;
 	private String vrijemeDolaska;
 	private String dodatniZahtjevi;
@@ -18,6 +19,14 @@ public class PrijavaModel {
 
 	public int getKorisnikId() {
 		return korisnikId;
+	}
+
+	public String getVrijemePrijave() {
+		return vrijemePrijave;
+	}
+
+	public void setVrijemePrijave(String vrijemePrijave) {
+		this.vrijemePrijave = vrijemePrijave;
 	}
 
 	public void setKorisnikId(int korisnikId) {

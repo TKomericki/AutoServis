@@ -8,13 +8,13 @@ replace into radno_vrijeme(id_radnog_vremena, pon_pocetak, pon_kraj, uto_pocetak
 replace into radno_vrijeme(id_radnog_vremena, pon_pocetak, pon_kraj, uto_pocetak, uto_kraj, sri_pocetak, sri_kraj, cet_pocetak, cet_kraj, pet_pocetak, pet_kraj)values (2, '12:00:00', '18:00:00', '7:00:00', '13:00:00', '12:00:00', '18:00:00', '7:00:00', '13:00:00', '12:00:00', '18:00:00');
 #replace into prijava(vrijeme_Prijave, id_Korisnika, id_Servisera, preuzeto, zavrseno, reg_zamjensko) values('2019-01-02 17:08:21', 1, 10, false, false, 0);
 
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123AB", "Astra", 2008);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456AB", "Astra", 2009);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789AB", "Astra", 2010);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123CD", "Astra", 2011);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456CD", "Astra", 2012);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789CD", "Astra", 2013);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123EF", "Astra", 2014);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456EF", "Astra", 2015);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789EF", "Astra", 2016);
-replace into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123GH", "Astra", 2017);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123AB", "Astra", 2008);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456AB", "Astra", 2009);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789AB", "Astra", 2010);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123CD", "Astra", 2011);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456CD", "Astra", 2012);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789CD", "Astra", 2013);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123EF", "Astra", 2014);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456EF", "Astra", 2015);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789EF", "Astra", 2016);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123GH", "Astra", 2017);

@@ -123,7 +123,7 @@ public class LoginController {
     public ModelAndView pocetna(){
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	boolean isLoggedIn = !auth.getName().equals("anonymousUser");
-        System.out.println(auth.isAuthenticated() + " " + auth.getName() + " " + isLoggedIn);
+        //System.out.println(auth.isAuthenticated() + " " + auth.getName() + " " + isLoggedIn);
     	/*Set<Prijava> prijave = new HashSet<>();
     	prijave.addAll(userService.getUserPrijave(1));
     	for(Prijava prijava : prijave) {
@@ -222,11 +222,10 @@ public class LoginController {
     @RequestMapping(value= {"/prijavaPopravka"}, method = RequestMethod.POST)
     public ModelAndView prijavaPopravka(PrijavaModel prijavaModel) {
     	ModelAndView modelAndView = new ModelAndView();
-    	System.out.println(prijavaModel.getIdServisera() + " " + prijavaModel.getVrijemeDolaska() + "\n" + prijavaModel.getDodatniZahtjevi() + " " + prijavaModel.getRegZamjensko());
-    	/*for(Integer usluga : prijava.getUsluge()) {
-    		System.out.println(usluga);
-    	}*/
+    	//System.out.println(prijavaModel.getIdServisera() + " " + prijavaModel.getVrijemeDolaska() + "\n" + prijavaModel.getDodatniZahtjevi() + " " + prijavaModel.getRegZamjensko());
+
     	User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    	//System.out.println(prijavaModel.getRegZamjensko().isEmpty() ? "nema rege pickoo" : prijavaModel.getRegZamjensko());
     	Prijava prijava = new Prijava();
     	prijava.setIdServisera(prijavaModel.getIdServisera());
     	if(!prijavaModel.getRegZamjensko().isEmpty()) {
@@ -244,30 +243,61 @@ public class LoginController {
     	for(int usluga : prijavaModel.getUsluge()) {
     		usluge.add(userService.getUslugaById(usluga).get());
     	}
-    	for(Usluga usluga : usluge) {
-    		System.out.println(usluga.getImeUsluge() + " " + usluga.getCijena());
-    	}
     	prijava.setUsluge(usluge);
-    	prijava = userService.savePrijava(prijava);
-    	for(Usluga usluga : prijava.getUsluge()) {
-    		System.out.println(usluga.getImeUsluge() + " " + usluga.getCijena());
-    	}
-    	Set<Prijava> prijave = userService.getUserPrijave(user.getId());
-    	for(Prijava prijavica : prijave) {
-    		for(Usluga usluga : prijavica.getUsluge()) System.out.println(usluga.getImeUsluge() + " " + usluga.getCijena());
-    	}
+    	
+    	prijava = userService.savePrijava(prijava); 
+    	
         modelAndView.setViewName("uspjeh");
         return modelAndView;
     }
     
     @RequestMapping(value= {"/editPrijava"}, method = RequestMethod.GET)
     public ModelAndView editPrijava(@RequestParam int id, @RequestParam Timestamp vrijeme) {    	
-    	System.out.println(id + " " + vrijeme);
+    	//System.out.println(id + " " + vrijeme);
     	ModelAndView modelAndView = new ModelAndView();
-    	Optional<Prijava> prijava = userService.findPrijavaByPrijavaKey(id, vrijeme);
-    	if(prijava.isPresent()) modelAndView.addObject("prijava", prijava.get());
-    	//System.out.println(prijava.isPresent());
-        //System.out.println( prijava.get().isZavrseno() + " " + prijava.get().getIdServisera());
+    	Prijava prijava = userService.findPrijavaByPrijavaKey(id, vrijeme).get();
+    	//System.out.println(prijava.getIdServisera() + " " + prijava.getRegZamjensko() + " " + prijava.getPrijavaKey().getIdKorisnika() + " " + prijava.getPrijavaKey().getVrijemePrijave() + " " + prijava.getVrijemeDolaska());
+    	
+    	PrijavaModel prijavaModel = new PrijavaModel();
+    	prijavaModel.setVrijemePrijave(prijava.getPrijavaKey().getVrijemePrijave().toString());
+    	prijavaModel.setKorisnikId(prijava.getPrijavaKey().getIdKorisnika());
+    	prijavaModel.setDodatniZahtjevi(prijava.getDodatniZahtjevi());
+    	prijavaModel.setIdServisera(prijava.getIdServisera());
+    	prijavaModel.setRegZamjensko(prijava.getRegZamjensko());
+    	prijavaModel.setVrijemeDolaska(prijava.getVrijemeDolaska().toString());
+    	Set<Integer> usluge = new HashSet<>();
+    	for(Usluga usluga : prijava.getUsluge()) {
+    		usluge.add(usluga.getIdUsluge());
+    	}
+    	prijavaModel.setUsluge(usluge);
+    	
+    	User serviser = userService.findUserById(prijava.getIdServisera());
+    	RadnoVrijeme radnoVrijeme = userService.getRadnoVrijeme(serviser.getIdRadnogVremena()).get();
+    	
+    	LocalDateTime date = LocalDateTime.now();
+    	List<LocalTime> vremena = new LinkedList<>();
+    	vremena.add(radnoVrijeme.getPonedjeljakPocetak());
+    	vremena.add(radnoVrijeme.getUtorakPocetak());
+    	vremena.add(radnoVrijeme.getSrijedaPocetak());
+    	vremena.add(radnoVrijeme.getCetvrtakPocetak());
+    	vremena.add(radnoVrijeme.getPetakPocetak());
+    	
+    	Set<LocalDate> datumi = new HashSet<>();
+    	for(int i = 1; i <= 10; i++) {
+    		LocalDateTime newDate = date.plusDays(i);
+    		int day = newDate.getDayOfWeek().getValue();
+    		if(day < 6) {
+    			if(vremena.get(day - 1).getHour() == 7) datumi.add(newDate.toLocalDate());    			
+    		}    		
+    	}
+    	
+    	Set<ZamjenskoVozilo> vozila = userService.getSlobodnaVozila();
+    	if(prijavaModel.getRegZamjensko() != null) vozila.add(userService.getVoziloById(prijavaModel.getRegZamjensko()));
+    	
+    	modelAndView.addObject("datumi", datumi);
+    	modelAndView.addObject("prijavaModel", prijavaModel);
+    	modelAndView.addObject("usluge", userService.getAllUsluge());
+    	modelAndView.addObject("zamjenskaVozila", vozila);
     	modelAndView.setViewName("popravakEdit");
     	return modelAndView;
     }
@@ -276,9 +306,51 @@ public class LoginController {
     public ModelAndView editKorisnik(@RequestParam String email) {
     	ModelAndView modelAndView = new ModelAndView();
     	User postojeciKorisnik = userService.findUserByEmail(email);
-    	System.out.println(postojeciKorisnik.getPassword());
+    	//System.out.println(postojeciKorisnik.getPassword());
         modelAndView.addObject("postojeciKorisnik", postojeciKorisnik);
-        modelAndView.setViewName("korisnikEdit");
+        if(postojeciKorisnik.getRole().equals("KORISNIK")) modelAndView.setViewName("korisnikEdit");
+        else modelAndView.setViewName("serviserEdit");
         return modelAndView;
+    }
+    
+    @RequestMapping(value = {"/popravakPromijenjen"}, method = RequestMethod.POST)
+    public ModelAndView popravakPromijenjen(PrijavaModel prijavaModel) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	
+    	Prijava staraPrijava = userService.findPrijavaByPrijavaKey(prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave())).get();
+    	Prijava prijava = new Prijava();
+    	prijava.setIdServisera(prijavaModel.getIdServisera());	
+    	if(!prijavaModel.getRegZamjensko().isEmpty()) {
+    		prijava.setRegZamjensko(prijavaModel.getRegZamjensko());
+    		userService.zauzmiVozilo(prijavaModel.getKorisnikId(), prijavaModel.getRegZamjensko());
+    	}
+    	if(staraPrijava.getRegZamjensko() != null) {
+    		if(!staraPrijava.getRegZamjensko().equals(prijavaModel.getRegZamjensko())) userService.oslobodiVozilo(staraPrijava.getRegZamjensko());
+    	}
+    	
+    	prijava.setPrijavaKey(new PrijavaKey());
+    	prijava.getPrijavaKey().setIdKorisnika(prijavaModel.getKorisnikId());
+    	prijava.getPrijavaKey().setVrijemePrijave(Timestamp.valueOf(prijavaModel.getVrijemePrijave()));
+    	prijava.setPreuzeto(staraPrijava.isPreuzeto());
+    	prijava.setZavrseno(staraPrijava.isZavrseno());
+    	prijava.setDodatniZahtjevi(prijavaModel.getDodatniZahtjevi());
+    	prijava.setVrijemeDolaska(LocalDate.parse(prijavaModel.getVrijemeDolaska()));
+    	Set<Usluga> usluge = new HashSet<>();
+    	for(int usluga : prijavaModel.getUsluge()) {
+    		usluge.add(userService.getUslugaById(usluga).get());
+    	}
+    	prijava.setUsluge(usluge);
+    	
+    	prijava = userService.replacePrijava(prijava, staraPrijava);
+    	
+    	modelAndView.setViewName("uspjeh");
+    	return modelAndView;
+    }
+    
+    @RequestMapping(value = {"/korisnikPromijenjen"}, method = RequestMethod.POST)
+    public ModelAndView korisnikPromijenjen(User user) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	modelAndView.setViewName("uspjeh");
+    	return modelAndView;
     }
 }

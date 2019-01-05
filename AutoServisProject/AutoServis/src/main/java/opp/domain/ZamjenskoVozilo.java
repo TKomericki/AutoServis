@@ -31,7 +31,6 @@ public class ZamjenskoVozilo {
 	@Column(name = "tip_vozila")
 	private String tipVozila;
 	
-	@NotEmpty
 	@Column(name = "godina_proizvodnje")
 	private int godinaProizvodnje;
 

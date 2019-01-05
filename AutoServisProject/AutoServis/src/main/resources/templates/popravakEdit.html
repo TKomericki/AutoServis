@@ -35,26 +35,14 @@
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Ispunite polja:</h4>
           
-		  <form class="needs-validation" novalidate>
+		  <form class="needs-validation" novalidate autocomplete="off" th:action="@{/popravakPromijenjen}"
+                  th:object="${prijavaModel}" method="post" role="form">
 		  
 			<hr class="mb-4">
 			
-			<div class="container">
-			
-				<div class="row">
-			
-					<div class="col-md-7 mb-3">
-					<label for="serviser">Serviser</label>
-					
-					<select class="custom-select d-block w-100" id="serviser" >
-					  <option value="">Odabir...</option>
-					  <option>serviser1???</option>
-					</select>
-				  </div>
-			  
-			  </div>
-			  
-			  <hr class="mb-4">
+			<textarea th:field="*{idServisera}" th:text="${prijavaModel.getIdServisera()}" ></textarea>
+			<textarea th:field="*{korisnikId}" th:text="${prijavaModel.getKorisnikId()}" ></textarea>
+			<textarea th:field="*{vrijemePrijave}" th:text="${prijavaModel.getVrijemePrijave()}" ></textarea>
               
 			  <div class="container" id="containerNoLeftPadding">
 			  
@@ -62,16 +50,12 @@
 				
 				<!-- To group radio buttons they must all have the same name value. 
 				This allows only one to be selected at a time and applies required to the whole group. -->
-                
-				<label class="RadioContainer">Datum1
-					<input type="radio" name="datum" value="1" required>
+                <div class="container" th:each="datum : ${datumi}">
+				<label class="RadioContainer">
+					<input type="radio" name="datum" th:field="*{vrijemeDolaska}" th:value="${datum}" th:text="${datum}" th:checked="${prijavaModel.getVrijemeDolaska().equals(datum)}" required>
 					<span class="checkmark"></span>
 				</label>
-				
-				<label class="RadioContainer">Datum2
-					<input type="radio" name="datum" value="2">
-					<span class="checkmark"></span>
-				</label>
+				</div>
 				
 				<div class="invalid-feedback">
                   Odabir vremena dolaska obavezan.
@@ -88,15 +72,12 @@
 			  
 					<label for="usluge">Usluge:</label>
 					
-					<label class="CheckContainer">One
-					  <input type="checkbox">
+					<div class="container" th:each="usluga : ${usluge}">
+					<label class="CheckContainer">
+					  <input type="checkbox" th:field="*{usluge}" th:value="${usluga.getIdUsluge()}" th:text="${usluga.getImeUsluge()}">
 					  <span class="checkmark"></span>
 					</label>
-
-					<label class="CheckContainer">Two
-					  <input type="checkbox">
-					  <span class="checkmark"></span>
-					</label>
+					</div>
 					
 				</div>
 				  
@@ -104,7 +85,7 @@
 				  
 					<div class="form-group">
 					  <label for="comment">Dodatne usluge:</label>
-					  <textarea class="form-control" rows="5" id="comment"></textarea>
+					  <textarea class="form-control" th:field="*{dodatniZahtjevi}" rows="5" id="comment"></textarea>
 					</div> 
 					
 				</div>
@@ -120,9 +101,9 @@
 					<div class="col-md-7 mb-3">
 						<label for="rezervnoVozilo">Rezervno vozilo:</label>
 						
-						<select class="custom-select d-block w-100" id="serviser" >
+						<select class="custom-select d-block w-100" id="serviser" th:field="*{regZamjensko}" >
 						  <option value="">Odabir...</option>
-						  <option>vozilo1???</option>
+						  <option th:each="vozilo : ${zamjenskaVozila}" th:value="${vozilo.getRegistracijskaOznakaVozila()}" th:text="${vozilo.getTipVozila()} + ' ' + ${vozilo.getGodinaProizvodnje()}"></option>
 						</select>
 					</div>
 				</div>
