@@ -27,6 +27,12 @@
   max-width: 40rem;
 }
 
+.footer-sticky {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
 footer {
   padding-top: 3rem;
   padding-bottom: 3rem;
