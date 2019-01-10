@@ -35,7 +35,7 @@ public class Usluga {
     @JoinTable(
         name = "Usluga_prijava", 
         joinColumns = { @JoinColumn(name = "id_usluge") }, 
-        inverseJoinColumns = { @JoinColumn(name = "idKOrisnika"), @JoinColumn(name = "vrijemePrijave" )}
+        inverseJoinColumns = { @JoinColumn(name = "idKorisnika"), @JoinColumn(name = "vrijemePrijave" )}
     )
     Set<Prijava> prijave = new HashSet<>();
 

@@ -6,11 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import javax.print.attribute.standard.DateTimeAtCompleted;
@@ -186,29 +188,34 @@ public class LoginController {
     	Set<LocalDate> datumi = new HashSet<>();
     	LocalDateTime date = LocalDateTime.now();
     	Set<ZamjenskoVozilo> zamjenskaVozila = userService.getSlobodnaVozila();
-    	if(email.equals(null)) {
-    		modelAndView.setViewName("popravak2");
-            return modelAndView;
+    	if(email.isEmpty()) {
+    		for(int i = 1; i <= 10; i++) {
+        		LocalDateTime newDate = date.plusDays(i);
+        		int day = newDate.getDayOfWeek().getValue();
+        		if(day < 6) datumi.add(newDate.toLocalDate());    			   		
+        	}
+
     	}
-    	User serviser = userService.findUserByEmail(email);
-    	//System.out.println(Integer.valueOf(serviser.getId()).toString() + " " + serviser.getName() + " " + serviser.getLastName());
-    	//modelAndView.addObject("serviser", serviser);   	
-    	RadnoVrijeme radnoVrijeme = userService.getRadnoVrijeme(serviser.getIdRadnogVremena()).get();
+    	else {
+    		User serviser = userService.findUserByEmail(email);   	
+	    	RadnoVrijeme radnoVrijeme = userService.getRadnoVrijeme(serviser.getIdRadnogVremena()).get();
+	    	
+	    	List<LocalTime> vremena = new LinkedList<>();
+	    	vremena.add(radnoVrijeme.getPonedjeljakPocetak());
+	    	vremena.add(radnoVrijeme.getUtorakPocetak());
+	    	vremena.add(radnoVrijeme.getSrijedaPocetak());
+	    	vremena.add(radnoVrijeme.getCetvrtakPocetak());
+	    	vremena.add(radnoVrijeme.getPetakPocetak());
+	    	for(int i = 1; i <= 10; i++) {
+	    		LocalDateTime newDate = date.plusDays(i);
+	    		int day = newDate.getDayOfWeek().getValue();
+	    		if(day < 6) {
+	    			if(vremena.get(day - 1).getHour() == 7) datumi.add(newDate.toLocalDate());    			
+	    		}	
+	    	}
+	    	prijava.setIdServisera(String.valueOf(serviser.getId()));
+    	}
     	
-    	List<LocalTime> vremena = new LinkedList<>();
-    	vremena.add(radnoVrijeme.getPonedjeljakPocetak());
-    	vremena.add(radnoVrijeme.getUtorakPocetak());
-    	vremena.add(radnoVrijeme.getSrijedaPocetak());
-    	vremena.add(radnoVrijeme.getCetvrtakPocetak());
-    	vremena.add(radnoVrijeme.getPetakPocetak());
-    	for(int i = 1; i <= 10; i++) {
-    		LocalDateTime newDate = date.plusDays(i);
-    		int day = newDate.getDayOfWeek().getValue();
-    		if(day < 6) {
-    			if(vremena.get(day - 1).getHour() == 7) datumi.add(newDate.toLocalDate());    			
-    		}    		
-    	}
-    	prijava.setIdServisera(serviser.getId());
     	modelAndView.addObject("usluge", userService.getAllUsluge());
     	modelAndView.addObject("datumi", datumi);
     	//User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -227,7 +234,19 @@ public class LoginController {
     	User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     	//System.out.println(prijavaModel.getRegZamjensko().isEmpty() ? "nema rege pickoo" : prijavaModel.getRegZamjensko());
     	Prijava prijava = new Prijava();
-    	prijava.setIdServisera(prijavaModel.getIdServisera());
+    	if(prijavaModel.getIdServisera().isEmpty()) {
+    		List<Integer> jutarnjeSmjene = userService.getJutarnjeSmjene(LocalDate.parse(prijavaModel.getVrijemeDolaska()).getDayOfWeek().getValue());
+    		List<User> sviServiseri = new ArrayList<>();
+    		for(User serviser : userService.getAllServiseri()){
+    			if(jutarnjeSmjene.contains(Integer.parseInt(serviser.getIdRadnogVremena()))) sviServiseri.add(serviser);
+    		}
+    		
+    		Random rand = new Random();
+    		prijava.setIdServisera(sviServiseri.get(rand.nextInt(sviServiseri.size())).getId());
+    		    		
+    	}
+    	else prijava.setIdServisera(Integer.parseInt(prijavaModel.getIdServisera()));
+    	
     	if(!prijavaModel.getRegZamjensko().isEmpty()) {
     		prijava.setRegZamjensko(prijavaModel.getRegZamjensko());
     		userService.zauzmiVozilo(user.getId(), prijavaModel.getRegZamjensko());
@@ -262,7 +281,7 @@ public class LoginController {
     	prijavaModel.setVrijemePrijave(prijava.getPrijavaKey().getVrijemePrijave().toString());
     	prijavaModel.setKorisnikId(prijava.getPrijavaKey().getIdKorisnika());
     	prijavaModel.setDodatniZahtjevi(prijava.getDodatniZahtjevi());
-    	prijavaModel.setIdServisera(prijava.getIdServisera());
+    	prijavaModel.setIdServisera(String.valueOf(prijava.getIdServisera()));
     	prijavaModel.setRegZamjensko(prijava.getRegZamjensko());
     	prijavaModel.setVrijemeDolaska(prijava.getVrijemeDolaska().toString());
     	Set<Integer> usluge = new HashSet<>();
@@ -306,10 +325,15 @@ public class LoginController {
     public ModelAndView editKorisnik(@RequestParam String email) {
     	ModelAndView modelAndView = new ModelAndView();
     	User postojeciKorisnik = userService.findUserByEmail(email);
+    	if(postojeciKorisnik == null) System.out.println("NEMAAAAAAAA");
+    	//System.out.println(postojeciKorisnik);
     	//System.out.println(postojeciKorisnik.getPassword());
         modelAndView.addObject("postojeciKorisnik", postojeciKorisnik);
         if(postojeciKorisnik.getRole().equals("KORISNIK")) modelAndView.setViewName("korisnikEdit");
-        else modelAndView.setViewName("serviserEdit");
+        else {
+        	modelAndView.addObject("radnaVremena", userService.getAllRadnaVremena());
+        	modelAndView.setViewName("serviserEdit");
+        }
         return modelAndView;
     }
     
@@ -319,7 +343,7 @@ public class LoginController {
     	
     	Prijava staraPrijava = userService.findPrijavaByPrijavaKey(prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave())).get();
     	Prijava prijava = new Prijava();
-    	prijava.setIdServisera(prijavaModel.getIdServisera());	
+    	prijava.setIdServisera(Integer.parseInt(prijavaModel.getIdServisera()));	
     	if(!prijavaModel.getRegZamjensko().isEmpty()) {
     		prijava.setRegZamjensko(prijavaModel.getRegZamjensko());
     		userService.zauzmiVozilo(prijavaModel.getKorisnikId(), prijavaModel.getRegZamjensko());
@@ -349,7 +373,9 @@ public class LoginController {
     
     @RequestMapping(value = {"/korisnikPromijenjen"}, method = RequestMethod.POST)
     public ModelAndView korisnikPromijenjen(User user) {
-    	ModelAndView modelAndView = new ModelAndView();
+    	ModelAndView modelAndView = new ModelAndView();    	
+    	userService.replaceUser(user);
+    	
     	modelAndView.setViewName("uspjeh");
     	return modelAndView;
     }

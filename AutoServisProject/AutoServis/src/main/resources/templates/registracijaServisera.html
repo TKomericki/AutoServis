@@ -71,7 +71,7 @@
 
                 <div class="container">
                     <div class="container" id="containerNoLeftPadding" th:each="radnoVrijeme : ${radnaVremena}">
-					<label class="RadioContainer">One
+					<label class="RadioContainer" ><label th:text="'Smjena ' + ${radnoVrijeme.getIdRadnogVremena()}"></label>
 						<input type="radio" th:field="*{idRadnogVremena}" name="radio" th:value="${radnoVrijeme.getIdRadnogVremena()}" required>
 						<span class="checkmark"></span>
 					</label>

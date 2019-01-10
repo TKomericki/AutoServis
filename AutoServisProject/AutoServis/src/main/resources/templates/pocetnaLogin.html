@@ -81,6 +81,7 @@
 						  <th scope="col">e-mail</th>
 						  <th scope="col">Ime</th>
 						  <th scope="col">Prezime</th>
+						  <th></th>
 						</tr>
 					  </thead>
 					  
@@ -101,16 +102,17 @@
 						  <th scope="col">Id korisnika</th>
 						  <th scope="col">Vrijeme prijave</th>
 						  <th scope="col">Vrijeme dolaska</th>
-						  <th scope="col">Korisnik</th>
 						  <th scope="col">Preuzeto</th>
 						  <th scope="col">Zavrseno</th>
+						  <th></th>
 						</tr>
 					  </thead>
 					  
 					  <tbody>
 						<tr th:each="prijava : ${prijave}">
-							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
 							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
 							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
 							<td><span th:text="${prijava.isZavrseno()}"></span></td>
 							<td>							
@@ -130,6 +132,7 @@
 						  <th scope="col">Reg zamjensko</th>
 						  <th scope="col">Preuzeto</th>
 						  <th scope="col">Zavrseno</th>
+						  <th></th>
 						</tr>
 					  </thead>
 					  

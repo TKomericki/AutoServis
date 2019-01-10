@@ -26,7 +26,11 @@
                   role="form">
             
 			<h4 class="mb-3">Ispunite polja:</h4>
-
+			
+			<textarea th:field="*{id}" th:text="${postojeciKorisnik.getId()}" hidden></textarea>
+			<textarea th:field="*{active}" th:text="${postojeciKorisnik.getActive()}" hidden></textarea>
+			<textarea th:field="*{role}" th:text="${postojeciKorisnik.getRole()}" hidden></textarea>
+			
             <div class="row">
                 <!--<div class="form-group">-->
                     <div class="col-md-6 mb-3">
@@ -57,9 +61,8 @@
                 
                     <div class="mb-3">
                         <input type="password" th:field="*{password}"
-                               placeholder="Password" class="form-control"/> <label
-                            th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-                            class="validation-message"></label>
+                               placeholder="Password" class="form-control"/> 
+                               <label class="validation-message"></label>
                     </div>
                 
                 

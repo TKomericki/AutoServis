@@ -7,7 +7,7 @@ import java.util.Set;
 public class PrijavaModel {
 	private int korisnikId;
 	private String vrijemePrijave;
-	private int idServisera;
+	private String idServisera;
 	private String vrijemeDolaska;
 	private String dodatniZahtjevi;
 	private String regZamjensko;
@@ -33,11 +33,11 @@ public class PrijavaModel {
 		this.korisnikId = korisnikId;
 	}
 
-	public int getIdServisera() {
+	public String getIdServisera() {
 		return idServisera;
 	}
 
-	public void setIdServisera(int idServisera) {
+	public void setIdServisera(String idServisera) {
 		this.idServisera = idServisera;
 	}
 

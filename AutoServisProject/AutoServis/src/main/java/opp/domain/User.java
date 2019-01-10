@@ -19,7 +19,7 @@ import javax.validation.constraints.NotEmpty;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private int id;
     @Column(name = "email")
@@ -118,6 +118,9 @@ public class User {
 	}
 	public int getId() {
 		return this.id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getIdRadnogVremena() {
 		return idRadnogVremena;

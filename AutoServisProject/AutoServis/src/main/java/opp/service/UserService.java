@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +23,7 @@ public class UserService {
     private ZamjenskoVoziloRepository zamjenskoVoziloRepository;
     private RadnoVrijemeRepository radnoVrijemeRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    
     @Autowired
     public UserService(UserRepository userRepository, PrijavaRepository prijavaRepository,
     				   UslugaRepository uslugaRepository, RadnoVrijemeRepository radnoVrijemeRepository,
@@ -53,6 +54,7 @@ public class UserService {
 
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setId(this.getAllUsers().size());
         user.setActive(1);
         user.setRole("KORISNIK");
         return userRepository.save(user);
@@ -74,8 +76,20 @@ public class UserService {
     	return this.savePrijava(prijava);
     }
     
+    public User replaceUser(User newUser) {
+    	System.out.println(newUser.getId());
+    	User oldUser = userRepository.findById(newUser.getId()).get();
+    	if(newUser.getPassword().isEmpty()) newUser.setPassword(oldUser.getPassword());
+    	else newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+    	userRepository.delete(oldUser);
+    	userRepository.save(newUser);
+
+    	return newUser;
+    }
+    
     public User saveServiser(User serviser) {
         serviser.setPassword(bCryptPasswordEncoder.encode(serviser.getPassword()));
+        serviser.setId(this.getAllUsers().size());
         serviser.setActive(1);
         serviser.setRole("SERVISER");
         return userRepository.save(serviser);
@@ -84,7 +98,7 @@ public class UserService {
     public Set<User> getAllUsers(){
     	Set<User> users = new HashSet<>();
     	users.addAll(userRepository.findAll());
-    	users.removeIf(r -> r.getRole().equals("ADMIN"));
+    	//users.removeIf(r -> r.getRole().equals("ADMIN"));
     	return users;
     }
     
@@ -145,6 +159,18 @@ public class UserService {
     public Optional<RadnoVrijeme> getRadnoVrijeme(String idRadnogVremena){
     	Optional<RadnoVrijeme> radnoVrijeme = radnoVrijemeRepository.findById(Integer.parseInt(idRadnogVremena));
     	return radnoVrijeme;
+    }
+    
+    public List<Integer> getJutarnjeSmjene(int dan){
+    	List<RadnoVrijeme> svaRadnaVremena = this.getAllRadnaVremena();
+    	List<Integer> indeksiVremena = new ArrayList<>();
+    	if(dan == 1) svaRadnaVremena.removeIf(s -> s.getPonedjeljakPocetak().getHour() != 7);
+    	if(dan == 2) svaRadnaVremena.removeIf(s -> s.getUtorakPocetak().getHour() != 7);
+    	if(dan == 3) svaRadnaVremena.removeIf(s -> s.getSrijedaPocetak().getHour() != 7);
+    	if(dan == 4) svaRadnaVremena.removeIf(s -> s.getCetvrtakPocetak().getHour() != 7);
+    	if(dan == 5) svaRadnaVremena.removeIf(s -> s.getPetakPocetak().getHour() != 7);
+    	for(RadnoVrijeme radno : svaRadnaVremena) indeksiVremena.add(radno.getIdRadnogVremena());
+    	return indeksiVremena;
     }
     
     public Optional<Usluga> getUslugaById(int id){
