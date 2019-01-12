@@ -105,20 +105,36 @@
 						  <th scope="col">Preuzeto</th>
 						  <th scope="col">Zavrseno</th>
 						  <th></th>
+						  <th></th>
+						  <th></th>
 						</tr>
 					  </thead>
 					  
 					  <tbody>
 						<tr th:each="prijava : ${prijave}">
-							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
-							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
-							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
-							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
-							<td><span th:text="${prijava.isZavrseno()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.isZavrseno()}"></span></td>
+							<td>
+								<a  class="btn btn-primary my-2">Prihvati</a>
+							</td>
+							<td>
+								<a  class="btn btn-primary my-2">Obavljeno</a>
+							</td>
 							<td>							
 								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Edit</a>    
           					</td>
 						</tr>
+						
+						<tr class="prihvacena">
+						</tr>
+						
+						<tr class="obavljena">
+						</tr>
+
+						
 					  </tbody>
 					</table>
 					
@@ -149,6 +165,13 @@
 								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Edit</a>    
           					</td>
 						</tr>
+						
+						<tr class="prihvacena">
+						</tr>
+						
+						<tr class="obavljena">
+						</tr>
+						
 					  </tbody>
 					</table>
 				

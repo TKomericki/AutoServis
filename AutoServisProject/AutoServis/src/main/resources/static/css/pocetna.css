@@ -33,6 +33,14 @@
 	width: 100%;
 }
 
+tr.prihvacena {
+	background-color: #e6e6e6;
+}
+
+tr.obavljena {
+	background-color: #cce0ff;
+}
+
 footer {
   padding-top: 3rem;
   padding-bottom: 3rem;
