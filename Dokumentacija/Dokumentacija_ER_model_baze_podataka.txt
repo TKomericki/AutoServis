@@ -1,0 +1,29 @@
+﻿user = {user_id, broj_telefona, email, godina_proizvodnje, id_radnog_vremena, last_name, 
+		name, password, registracija, role, tip_vozila} 
+K = {user_id}
+
+zamjensko_vozilo = {reg_oznaka_vozila, godina_proizvodnje, id_korisnika, tip_vozila}
+K = {reg_oznaka_vozila}
+
+radno_vrijeme = {id_radnog_vremena, cet_kraj, cet_pocetak, pet_kraj, pet_pocetak,
+				 pon_kraj, pon_pocetak, sri_kraj, sri_pocetak, uto_kraj, uto_pocetak}
+K = {id_radnog_vremena}
+
+odabire_servisera  = {id_servisera, user_id, vrijeme_prijave}
+K = {id_servisera, vrijeme_prijave}
+
+radi = {id_radnog_vremena, user_id}
+K = {id_radnog_vremena, user_id}
+
+odabire = {id_korisnika, vrijeme_prijave, id_usluge}
+K = {id_korisnika, vrijeme_prijave, id_usluge}
+
+posuđuje = {id_korisnika, vrijeme_prijave, reg_oznaka_vozila}
+K = {id_korisnika, vrijeme_prijave}
+
+usluga = {id_usluge, ime_usluge, cijena_usluge}
+K = {id_usluge}
+
+prijava = {id_korisnika, vrijeme_prijave, dodatni_zahtjevi, id_servisera, preuzeto, 
+		   reg_zamjensko, vrijeme_dolaska, vrijeme_zavrsetka, zavrseno}
+K = {id_korisnika, vrijeme_prijave}
