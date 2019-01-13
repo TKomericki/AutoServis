@@ -43,8 +43,10 @@
 			<textarea th:field="*{idServisera}" th:text="${prijavaModel.getIdServisera()}" hidden></textarea>
 			<textarea th:field="*{korisnikId}" th:text="${prijavaModel.getKorisnikId()}" hidden></textarea>
 			<textarea th:field="*{vrijemePrijave}" th:text="${prijavaModel.getVrijemePrijave()}" hidden></textarea>
-              
-			  <div class="container" id="containerNoLeftPadding">
+      <div th:unless="${isKorisnik}">
+          <textarea th:field="*{vrijemeDolaska}" th:text="${prijavaModel.getVrijemeDolaska()}" hidden></textarea>
+      </div>        
+			  <div th:if="${isKorisnik}" class="container" id="containerNoLeftPadding">
 			  
                 <label for="vrijemeDolaska">Vrijeme dolaska:</label>
 				

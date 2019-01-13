@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.validation.Valid;
@@ -79,7 +80,6 @@ public class LoginController {
     public ModelAndView serviserRegistration(){
         ModelAndView modelAndView = new ModelAndView();
         List<RadnoVrijeme> radnaVremena = userService.getAllRadnaVremena();
-        System.out.println(radnaVremena.size());
         User serviser = new User();
         modelAndView.addObject("user", serviser);
         modelAndView.addObject("radnaVremena", radnaVremena);
@@ -109,31 +109,12 @@ public class LoginController {
         return modelAndView;
     }
 
-    @RequestMapping(value="/admin/home", method = RequestMethod.GET)
-    public ModelAndView home(){
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.isAuthenticated() + " " + auth.getAuthorities());
-        User user = userService.findUserByEmail(auth.getName());
-        modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-        modelAndView.setViewName("admin/home");
-        return modelAndView;
-    }
     
     @RequestMapping(value={"/", "/pocetna"}, method = RequestMethod.GET)
     public ModelAndView pocetna(){
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	boolean isLoggedIn = !auth.getName().equals("anonymousUser");
-        //System.out.println(auth.isAuthenticated() + " " + auth.getName() + " " + isLoggedIn);
-    	/*Set<Prijava> prijave = new HashSet<>();
-    	prijave.addAll(userService.getUserPrijave(1));
-    	for(Prijava prijava : prijave) {
-    		for(Usluga usluga : prijava.getUsluge()) {
-    			System.out.println(usluga.getIdUsluge() + " " + usluga.getCijena() + " " + usluga.getImeUsluge());
-    		}
-    		System.out.println();
-    	}*/
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("isLoggedIn", isLoggedIn);
         modelAndView.setViewName("pocetna");
@@ -145,19 +126,31 @@ public class LoginController {
     	ModelAndView modelAndView = new ModelAndView();
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	User user = userService.findUserByEmail(auth.getName());
-    	Set<User> users = new HashSet<>();
-    	Set<Prijava> prijave = new HashSet<>();
+    	List<User> users = new ArrayList<>();
+    	List<Prijava> prijave = new ArrayList<>();
+    	List<Prijava> preuzetePrijave = new ArrayList<>();
+    	List<Prijava> gotovePrijave = new ArrayList<>();
     	String role = "";
     	
     	for(GrantedAuthority authority : auth.getAuthorities()) {
     		role = authority.getAuthority();
     		if(authority.getAuthority().equals("ADMIN")) users.addAll(userService.getAllUsers());
-    		else if(authority.getAuthority().equals("KORISNIK")) prijave.addAll(userService.getUserPrijave(user.getId()));
-    		else if(authority.getAuthority().equals("SERVISER")) prijave.addAll(userService.getServiserPrijave(user.getId()));
+    		else if(authority.getAuthority().equals("KORISNIK")) { 
+    			prijave.addAll(userService.getUserPrijave(user.getId()));
+    			preuzetePrijave.addAll(userService.getUserPreuzetePrijave(user.getId()));
+    			gotovePrijave.addAll(userService.getUserZavrsenePrijave(user.getId()));
+    		}
+    		else if(authority.getAuthority().equals("SERVISER")) { 
+    			prijave.addAll(userService.getServiserPrijave(user.getId()));
+    			preuzetePrijave.addAll(userService.getServiserPreuzetePrijave(user.getId()));
+    			gotovePrijave.addAll(userService.getServiserZavrsenePrijave(user.getId()));
+    		}
     	}
     	
     	modelAndView.addObject("users", users);
-    	modelAndView.addObject("prijave", prijave);   	
+    	modelAndView.addObject("prijave", prijave);
+    	modelAndView.addObject("preuzetePrijave", preuzetePrijave);
+    	modelAndView.addObject("gotovePrijave", gotovePrijave);
     	modelAndView.addObject("role", role);
     	
         modelAndView.setViewName("pocetnaLogin");
@@ -185,9 +178,10 @@ public class LoginController {
     public ModelAndView popravak(@RequestParam String email) {
     	ModelAndView modelAndView = new ModelAndView();
     	PrijavaModel prijava = new PrijavaModel();
+    	//prijava.setUsluge(new HashSet<>());
     	Set<LocalDate> datumi = new HashSet<>();
     	LocalDateTime date = LocalDateTime.now();
-    	Set<ZamjenskoVozilo> zamjenskaVozila = userService.getSlobodnaVozila();
+    	List<ZamjenskoVozilo> zamjenskaVozila = userService.getSlobodnaVozila();
     	if(email.isEmpty()) {
     		for(int i = 1; i <= 10; i++) {
         		LocalDateTime newDate = date.plusDays(i);
@@ -217,9 +211,7 @@ public class LoginController {
     	}
     	
     	modelAndView.addObject("usluge", userService.getAllUsluge());
-    	modelAndView.addObject("datumi", datumi);
-    	//User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-    	//System.out.println(user.getEmail());
+    	modelAndView.addObject("datumi", datumi.stream().sorted().collect(Collectors.toList()));
     	modelAndView.addObject("prijava", prijava);
     	modelAndView.addObject("zamjenskaVozila", zamjenskaVozila);
         modelAndView.setViewName("popravak2");
@@ -229,10 +221,8 @@ public class LoginController {
     @RequestMapping(value= {"/prijavaPopravka"}, method = RequestMethod.POST)
     public ModelAndView prijavaPopravka(PrijavaModel prijavaModel) {
     	ModelAndView modelAndView = new ModelAndView();
-    	//System.out.println(prijavaModel.getIdServisera() + " " + prijavaModel.getVrijemeDolaska() + "\n" + prijavaModel.getDodatniZahtjevi() + " " + prijavaModel.getRegZamjensko());
 
     	User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-    	//System.out.println(prijavaModel.getRegZamjensko().isEmpty() ? "nema rege pickoo" : prijavaModel.getRegZamjensko());
     	Prijava prijava = new Prijava();
     	if(prijavaModel.getIdServisera().isEmpty()) {
     		List<Integer> jutarnjeSmjene = userService.getJutarnjeSmjene(LocalDate.parse(prijavaModel.getVrijemeDolaska()).getDayOfWeek().getValue());
@@ -258,14 +248,15 @@ public class LoginController {
     	prijava.setZavrseno(false);
     	prijava.setDodatniZahtjevi(prijavaModel.getDodatniZahtjevi());
     	prijava.setVrijemeDolaska(LocalDate.parse(prijavaModel.getVrijemeDolaska()));
-    	Set<Usluga> usluge = new HashSet<>();
+    	
+    	/*Set<Usluga> usluge = new HashSet<>();
     	for(int usluga : prijavaModel.getUsluge()) {
     		usluge.add(userService.getUslugaById(usluga).get());
-    	}
-    	prijava.setUsluge(usluge);
+    	}*/
+    	userService.addUslugaPrijavaVeze(prijavaModel.getUsluge(), prijava.getPrijavaKey().getIdKorisnika(), prijava.getPrijavaKey().getVrijemePrijave());
     	
     	prijava = userService.savePrijava(prijava); 
-    	
+    	modelAndView.addObject("Message", "Prijava popravka je uspješno stvorena.");
         modelAndView.setViewName("uspjeh");
         return modelAndView;
     }
@@ -284,11 +275,8 @@ public class LoginController {
     	prijavaModel.setIdServisera(String.valueOf(prijava.getIdServisera()));
     	prijavaModel.setRegZamjensko(prijava.getRegZamjensko());
     	prijavaModel.setVrijemeDolaska(prijava.getVrijemeDolaska().toString());
-    	Set<Integer> usluge = new HashSet<>();
-    	for(Usluga usluga : prijava.getUsluge()) {
-    		usluge.add(usluga.getIdUsluge());
-    	}
-    	prijavaModel.setUsluge(usluge);
+
+    	prijavaModel.setUsluge(userService.getPrijavaUslugeId(prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave())));
     	
     	User serviser = userService.findUserById(prijava.getIdServisera());
     	RadnoVrijeme radnoVrijeme = userService.getRadnoVrijeme(serviser.getIdRadnogVremena()).get();
@@ -310,10 +298,12 @@ public class LoginController {
     		}    		
     	}
     	
-    	Set<ZamjenskoVozilo> vozila = userService.getSlobodnaVozila();
-    	if(prijavaModel.getRegZamjensko() != null) vozila.add(userService.getVoziloById(prijavaModel.getRegZamjensko()));
+    	List<ZamjenskoVozilo> vozila = userService.getSlobodnaVozila();
+    	if(!prijavaModel.getRegZamjensko().isEmpty()) vozila.add(userService.getVoziloById(prijavaModel.getRegZamjensko()));
+    	User currentUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     	
-    	modelAndView.addObject("datumi", datumi);
+    	modelAndView.addObject("isKorisnik", currentUser.getRole().equals("KORISNIK"));
+    	modelAndView.addObject("datumi", datumi.stream().sorted().collect(Collectors.toSet()));
     	modelAndView.addObject("prijavaModel", prijavaModel);
     	modelAndView.addObject("usluge", userService.getAllUsluge());
     	modelAndView.addObject("zamjenskaVozila", vozila);
@@ -325,7 +315,6 @@ public class LoginController {
     public ModelAndView editKorisnik(@RequestParam String email) {
     	ModelAndView modelAndView = new ModelAndView();
     	User postojeciKorisnik = userService.findUserByEmail(email);
-    	if(postojeciKorisnik == null) System.out.println("NEMAAAAAAAA");
     	//System.out.println(postojeciKorisnik);
     	//System.out.println(postojeciKorisnik.getPassword());
         modelAndView.addObject("postojeciKorisnik", postojeciKorisnik);
@@ -343,15 +332,13 @@ public class LoginController {
     	
     	Prijava staraPrijava = userService.findPrijavaByPrijavaKey(prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave())).get();
     	Prijava prijava = new Prijava();
-    	prijava.setIdServisera(Integer.parseInt(prijavaModel.getIdServisera()));	
-    	if(!prijavaModel.getRegZamjensko().isEmpty()) {
-    		prijava.setRegZamjensko(prijavaModel.getRegZamjensko());
-    		userService.zauzmiVozilo(prijavaModel.getKorisnikId(), prijavaModel.getRegZamjensko());
-    	}
-    	if(staraPrijava.getRegZamjensko() != null) {
+    	prijava.setIdServisera(Integer.parseInt(prijavaModel.getIdServisera()));
+    	if(!staraPrijava.getRegZamjensko().isEmpty()) {
     		if(!staraPrijava.getRegZamjensko().equals(prijavaModel.getRegZamjensko())) userService.oslobodiVozilo(staraPrijava.getRegZamjensko());
     	}
+    	if(!prijavaModel.getRegZamjensko().isEmpty()) userService.zauzmiVozilo(prijavaModel.getKorisnikId(), prijavaModel.getRegZamjensko());
     	
+    	prijava.setRegZamjensko(prijavaModel.getRegZamjensko());
     	prijava.setPrijavaKey(new PrijavaKey());
     	prijava.getPrijavaKey().setIdKorisnika(prijavaModel.getKorisnikId());
     	prijava.getPrijavaKey().setVrijemePrijave(Timestamp.valueOf(prijavaModel.getVrijemePrijave()));
@@ -359,14 +346,15 @@ public class LoginController {
     	prijava.setZavrseno(staraPrijava.isZavrseno());
     	prijava.setDodatniZahtjevi(prijavaModel.getDodatniZahtjevi());
     	prijava.setVrijemeDolaska(LocalDate.parse(prijavaModel.getVrijemeDolaska()));
-    	Set<Usluga> usluge = new HashSet<>();
-    	for(int usluga : prijavaModel.getUsluge()) {
+    	//Set<Usluga> usluge = new HashSet<>();
+    	/*for(int usluga : prijavaModel.getUsluge()) {
     		usluge.add(userService.getUslugaById(usluga).get());
-    	}
-    	prijava.setUsluge(usluge);
+    		System.out.println(usluga);
+    	}*/
+    	userService.replaceUslugaPrijavaVeze(prijavaModel.getUsluge(), prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave()));
+    	userService.savePrijava(prijava);
     	
-    	prijava = userService.replacePrijava(prijava, staraPrijava);
-    	
+    	modelAndView.addObject("Message", "Prijava popravka je uspješno promijenjena.");
     	modelAndView.setViewName("uspjeh");
     	return modelAndView;
     }
@@ -376,7 +364,34 @@ public class LoginController {
     	ModelAndView modelAndView = new ModelAndView();    	
     	userService.replaceUser(user);
     	
+    	modelAndView.addObject("Message", "Podaci o korisniku su uspješno promijenjeni.");
     	modelAndView.setViewName("uspjeh");
     	return modelAndView;
     }
+    
+    @RequestMapping(value = {"/prihvatiPopravak"}, method = RequestMethod.GET)
+    public ModelAndView prihvatiPopravak(@RequestParam int id, @RequestParam Timestamp vrijeme) {
+    	ModelAndView modelAndView = new ModelAndView();    	
+    	
+    	Prijava prijava = userService.findPrijavaByPrijavaKey(id, vrijeme).get();
+    	prijava.setPreuzeto(true);
+    	userService.savePrijava(prijava);
+    	
+    	modelAndView.addObject("Message", "Prijava je uspješno oznaćena kao završena.");
+    	modelAndView.setViewName("uspjeh");
+    	return modelAndView;
+    }
+    
+    @RequestMapping(value = {"/popravakZavrsen"}, method = RequestMethod.GET)
+    public ModelAndView popravakZavrsen(@RequestParam int id, @RequestParam Timestamp vrijeme) {
+    	ModelAndView modelAndView = new ModelAndView();    	
+    	
+    	Prijava prijava = userService.findPrijavaByPrijavaKey(id, vrijeme).get();
+    	prijava.setZavrseno(true);
+    	userService.savePrijava(prijava);
+    	
+    	modelAndView.addObject("Message", "Prijava je uspjesno oznaćena kao završena!");
+    	modelAndView.setViewName("uspjeh");
+    	return modelAndView;
+    } 
 }

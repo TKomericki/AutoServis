@@ -39,8 +39,8 @@ public class Prijava {
 	private String dodatniZahtjevi;
 	@Column(name = "regZamjensko")
 	private String regZamjensko;
-	@ManyToMany(mappedBy = "prijave")
-	private Set<Usluga> usluge;
+	/*@ManyToMany(mappedBy = "prijave")
+	private Set<Usluga> usluge;*/
 	
 	public int getIdServisera() {
 		return idServisera;
@@ -91,11 +91,11 @@ public class Prijava {
 	public void setPrijavaKey(PrijavaKey prijavaKey) {
 		this.prijavaKey = prijavaKey;
 	}
-	public Set<Usluga> getUsluge() {
+	/*public Set<Usluga> getUsluge() {
 		return usluge;
 	}
 	public void setUsluge(Set<Usluga> usluge) {
 		this.usluge = usluge;
-	}
+	}*/
 	
 }

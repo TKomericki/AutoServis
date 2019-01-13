@@ -1,30 +1,36 @@
 package opp.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 @Embeddable
 @EqualsAndHashCode
 @AllArgsConstructor
-public class PrijavaKey implements Serializable{	
+public class UslugaPrijavaKey implements Serializable{
+	@Column(name = "id_usluge")
+	private int idUsluge;
 	@Column(name = "idKorisnika")
 	private int idKorisnika;
 	@Column(name = "vrijemePrijave")
 	private Timestamp vrijemePrijave;
 	
-	public PrijavaKey() {
+	public UslugaPrijavaKey() {
 		
 	}
 	
+	
+	public int getIdUsluge() {
+		return idUsluge;
+	}
+	public void setIdUsluge(int idUsluge) {
+		this.idUsluge = idUsluge;
+	}
 	public Timestamp getVrijemePrijave() {
 		return vrijemePrijave;
 	}

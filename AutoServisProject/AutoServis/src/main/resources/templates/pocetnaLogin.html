@@ -116,22 +116,32 @@
 							<td class="align-middle"><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
 							<td class="align-middle"><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
 							<td class="align-middle"><span th:text="${prijava.isPreuzeto()}"></span></td>
-							<td class="align-middle"><span th:text="${prijava.isZavrseno()}"></span></td>
-							<td>
-								<a  class="btn btn-primary my-2">Prihvati</a>
-							</td>
-							<td>
-								<a  class="btn btn-primary my-2">Obavljeno</a>
-							</td>
+							<td class="align-middle"><span th:text="${prijava.isZavrseno()}"></span></td>						
 							<td>							
 								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Edit</a>    
           					</td>
+          					<td>
+								<a th:href="@{'prihvatiPopravak?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Prihvati</a>
+							</td>
 						</tr>
 						
-						<tr class="prihvacena">
+						<tr class="prihvacena" th:each="prijava : ${preuzetePrijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>
+							<td>
+								<a th:href="@{'popravakZavrsen?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Zavrsi</a>
+							</td>
 						</tr>
 						
-						<tr class="obavljena">
+						<tr class="obavljena" th:each="prijava : ${gotovePrijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>						
 						</tr>
 
 						
@@ -161,15 +171,29 @@
 							<td><span th:text="${prijava.getRegZamjensko() == null ? ' ' : prijava.getRegZamjensko()}"></span></td>
 							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
 							<td><span th:text="${prijava.isZavrseno()}"></span></td>
-							<td>							
+							<td th:unless="${prijava.isPreuzeto()}">							
 								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Edit</a>    
-          					</td>
+							</td>
 						</tr>
 						
-						<tr class="prihvacena">
+						<tr class="prihvacena" th:each="prijava : ${preuzetePrijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.getIdServisera()}"></span></td>
+							<td><span th:text="${prijava.getRegZamjensko() == null ? ' ' : prijava.getRegZamjensko()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>
 						</tr>
 						
-						<tr class="obavljena">
+						<tr class="obavljena" th:each="prijava : ${gotovePrijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.getIdServisera()}"></span></td>
+							<td><span th:text="${prijava.getRegZamjensko() == null ? ' ' : prijava.getRegZamjensko()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>
 						</tr>
 						
 					  </tbody>

@@ -74,12 +74,12 @@
                     <div class="mb-3">
                         <label for="state">Lozinka</label>
                         <input type="password" th:field="*{password}"
-                               placeholder="Lozinka" class="form-control" required/> 
-						<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                               placeholder="Lozinka"  class="form-control"/> 
+						<!--<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
                             class="validation-message"></label>
 						<div class="invalid-feedback">
 							Unos lozinke je obavezan.
-						</div>
+						</div>-->
                     </div>
             
 			<hr class="mb-4">

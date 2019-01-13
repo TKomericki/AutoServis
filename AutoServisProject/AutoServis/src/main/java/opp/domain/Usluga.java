@@ -31,13 +31,13 @@ public class Usluga {
 	@NotEmpty
 	private int cijena;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
+	/*@ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
         name = "Usluga_prijava", 
         joinColumns = { @JoinColumn(name = "id_usluge") }, 
         inverseJoinColumns = { @JoinColumn(name = "idKorisnika"), @JoinColumn(name = "vrijemePrijave" )}
     )
-    Set<Prijava> prijave = new HashSet<>();
+    Set<Prijava> prijave = new HashSet<>();*/
 
 	public int getIdUsluge() {
 		return idUsluge;
@@ -59,12 +59,12 @@ public class Usluga {
 		this.cijena = cijena;
 	}
 
-	public Set<Prijava> getPrijave() {
+	/*public Set<Prijava> getPrijave() {
 		return prijave;
 	}
 
 	public void setPrijave(Set<Prijava> prijave) {
 		this.prijave = prijave;
-	}
+	}*/
 	
 }
