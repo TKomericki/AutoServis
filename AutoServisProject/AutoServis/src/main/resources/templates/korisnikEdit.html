@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Korisnik</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body class="bg-light">
+
+<div class="container">
+        <div class="py-5 text-center">
+            <a href="pocetna">
+                <img th:src="@{/images/AutoServis.png}" width="72" height="72" alt=""/>
+            </a>
+            <h2>Korisnik</h2>
+            <p class="lead">Izmjeni podatke o korisniku</p>
+        </div>
+    <div class="row">
+	
+        <div class="col-md-8 order-md-1">
+            <form autocomplete="off" action="#" th:action="@{/korisnikPromijenjen}"
+                  th:object="${postojeciKorisnik}" method="post" class="form-horizontal needs-validation" novalidate
+                  role="form">
+            
+			<h4 class="mb-3">Ispunite polja:</h4>
+			
+			<textarea th:field="*{id}" th:text="${postojeciKorisnik.getId()}" hidden></textarea>
+			<textarea th:field="*{active}" th:text="${postojeciKorisnik.getActive()}" hidden></textarea>
+			<textarea th:field="*{role}" th:text="${postojeciKorisnik.getRole()}" hidden></textarea>
+			
+            <div class="row">
+                <!--<div class="form-group">-->
+                    <div class="col-md-6 mb-3">
+                        <label for="state">Ime</label>
+                        <input type="text" th:field="*{name}" placeholder="Ime"
+                               class="form-control" id="firstName" required/>
+						<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                               class="validation-message"></label>
+						<div class="invalid-feedback">
+							Unos imena je obavezan.
+						</div>
+                    </div>
+                <!--</div>-->
+
+                <!--<div class="form-group">-->
+                    <div class="col-md-6 mb-3">
+                        <label for="state">Prezime</label>
+                        <input type="text" th:field="*{lastName}"
+                               placeholder="Prezime" class="form-control" required/>
+						<label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+                               class="validation-message"></label>
+						<div class="invalid-feedback">
+							Unos prezimena je obavezan.
+						</div>
+                    </div>
+                <!--</div>-->
+            </div>
+			
+			<hr class="mb-4">
+                
+                    <div class="mb-3">
+                        <label for="state">Email</label>
+                        <input type="email" th:field="*{email}" placeholder="vi@primjer.com"
+                               class="form-control" required/>
+						<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                            class="validation-message"></label>
+						<div class="invalid-feedback">
+							Unesite ispravan e-mail.
+						</div>
+                    </div>
+                
+                
+                    <div class="mb-3">
+                        <label for="state">Lozinka</label>
+                        <input type="password" th:field="*{password}"
+                               placeholder="Lozinka"  class="form-control"/>
+						<!--<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                            class="validation-message"></label>
+						<div class="invalid-feedback">
+							Unos lozinke je obavezan.
+						</div>-->
+                    </div>
+                
+            <hr class="mb-4">
+			
+                    <div class="mb-3">
+                        <label for="state">Broj Telefona</label>
+                        <input type="text" th:field="*{brojTelefona}"
+                               placeholder="Broj Telefona" class="form-control" required/>
+						<label th:if="${#fields.hasErrors('brojTelefona')}" th:errors="*{brojTelefona}"
+                            class="validation-message"></label>
+						<div class="invalid-feedback">
+							Unos broja telefona je obavezan.
+						</div>
+                    </div>
+            
+			<hr class="mb-4">
+
+                <div class="row">
+                
+                    <div class="col-md-5 mb-3">
+                        <label for="state">Tip Vozila</label>
+                        <input type="text" th:field="*{tipVozila}"
+                               placeholder="Tip Vozila" class="form-control" required/>
+						<label th:if="${#fields.hasErrors('tipVozila')}" th:errors="*{tipVozila}"
+                            class="validation-message"></label>
+						<div class="invalid-feedback">
+							Molimo unesite tip vozila.
+						</div>
+                    </div>
+                
+                
+                    <div class="col-md-4 mb-3">
+						<label for="state">Godina Proizvodnje</label>
+                        <select th:field="*{godinaProizvodnje}"
+                               placeholder="Godina Proizvodnje" class="form-control" required> <label
+                            th:if="${#fields.hasErrors('godinaProizvodnje')}" th:errors="*{godinaProizvodnje}"
+                            class="validation-message"></label>
+                            <!--<option value=" ">Odabir...</option>-->
+                            <option value="2018">2018</option>
+				            <option value="2017">2017</option>
+				            <option value="2016">2016</option>
+				            <option value="2015">2015</option>
+				            <option value="2014">2014</option>
+				            <option value="2013">2013</option>
+				            <option value="2012">2012</option>
+				            <option value="2011">2011</option>
+				            <option value="2010">2010</option>
+				            <option value="2009">2009</option>
+				            <option value="2008">2008</option>
+                            <option value="2007">2007</option>
+                            <option value="2006">2006</option>
+                            <option value="2005">2005</option>
+                            <option value="2004">2004</option>
+                            <option value="2003">2003</option>
+                            <option value="2002">2002</option>
+                            <option value="2001">2001</option>
+                            <option value="2000">2000</option>
+                        </select>
+						<div class="invalid-feedback">
+							Molimo odaberite ispravnu godinu.
+						</div>
+                    </div>
+                
+                    
+                    <div class="col-md-3 mb-3">
+                        <label for="state">Registracija</label>
+                        <input type="text" th:field="*{registracija}"
+                               placeholder="Registracija" class="form-control" required/>
+						<label th:if="${#fields.hasErrors('registracija')}" th:errors="*{registracija}"
+                            class="validation-message"></label>
+						<div class="invalid-feedback">
+							Unos registracije je obavezan.
+						</div>
+                    </div>
+                
+            </div>
+			
+			<hr class="mb-4">
+
+            <button type="submit" class="btn btn-primary btn-block">Spremi izmjene</button>
+
+                <a href="ispis" class="btn btn-default">Odustani od izmjena.</a>
+                <h2><span class="text-success" th:utext="${successMessage}"></span></h2>
+
+            </form>
+        </div>
+    </div>
+	
+	<footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017-2018 AutoServis</p>
+		<!--
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+		-->
+	</footer>
+	
+</div>
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/holder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+	<script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function() {
+        'use strict';
+
+        window.addEventListener('load', function() {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+    </script>
+
+</body>
+</html>

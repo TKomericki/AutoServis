@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+      
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" th:href="@{/images/index.ico}">
+
+    <title>Dobrodošli</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/pocetna.css}">
+    
+    
+  </head>
+
+  <body>
+
+    <header>
+      <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-md-7 py-4">
+              <h4 class="text-white">O Autoservisu</h4>
+              <p class="text-muted">Neke informacije o autoservisu fkt mi se ne da sad izmisljat lako to poslje promijenimo.</p>
+            </div>
+            <div class="col-sm-4 offset-md-1 py-4">
+              <h4 class="text-white">Kontakt</h4>
+              <ul class="list-unstyled">
+                <li><a href="#" class="text-white">Facebook</a></li>
+                <li><a class="text-white">Adresa: Izmisljena adresa 13</a></li>
+                <li><a class="text-white">Email: auto.servis@as.hr</a></li>
+				<li><a class="text-white">Radno vrijeme: radnim danom 7:00 do 18:00</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+          <a href="pocetna" class="navbar-brand d-flex align-items-center">
+            <strong>AutoServis</strong>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main role="main">
+
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 class="jumbotron-heading">Auto Servis</h1>
+          <p class="lead text-muted">Dobrodošli</p>
+          <p>
+            <a href="popravak" th:if="${role.equals('KORISNIK')}" class="btn btn-primary my-2">Prijavi vozilo</a>
+            <a href="registracijaServisera" th:if="${role.equals('ADMIN')}" class="btn btn-primary my-2">Registriraj Servisera</a>
+            <a href="logout" class="btn btn-primary my-2">Odjava</a>
+          </p>
+        </div>
+      </section>
+
+		<div class="album py-5 bg-light">
+			<div class="container">
+
+				<div class="row">
+			  
+					<table class="table" th:if="${role.equals('ADMIN')}">
+					  <thead>
+						<tr>
+						  <th scope="col">e-mail</th>
+						  <th scope="col">Ime</th>
+						  <th scope="col">Prezime</th>
+						  <th></th>
+						</tr>
+					  </thead>
+					  
+					  <tbody>
+						<tr th:each="user : ${users}">
+							<td><span th:text="${user.getEmail()}"></span></td>
+							<td><span th:text="${user.getName()}"></span></td>
+							<td><span th:text="${user.getLastName()}"></span></td>
+							<td><a th:href="@{'editKorisnik?email=' + ${user.getEmail()}}" class="btn btn-primary my-2">Edit</a></td>
+						</tr>
+					  </tbody>
+					</table>
+					
+					
+					<table class="table" th:if="${role.equals('SERVISER')}">
+					  <thead>
+						<tr>
+						  <th scope="col">Id korisnika</th>
+						  <th scope="col">Vrijeme prijave</th>
+						  <th scope="col">Vrijeme dolaska</th>
+						  <th scope="col">Preuzeto</th>
+						  <th scope="col">Zavrseno</th>
+						  <th></th>
+						  <th></th>
+						  <th></th>
+						</tr>
+					  </thead>
+					  
+					  <tbody>
+						<tr th:each="prijava : ${prijave}">
+							<td class="align-middle"><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td class="align-middle"><span th:text="${prijava.isZavrseno()}"></span></td>						
+							<td>							
+								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Edit</a>    
+          					</td>
+          					<td>
+								<a th:href="@{'prihvatiPopravak?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Prihvati</a>
+							</td>
+						</tr>
+						
+						<tr class="prihvacena" th:each="prijava : ${preuzetePrijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>
+							<td>
+								<a th:href="@{'popravakZavrsen?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Zavrsi</a>
+							</td>
+						</tr>
+						
+						<tr class="obavljena" th:each="prijava : ${gotovePrijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>						
+						</tr>
+
+						
+					  </tbody>
+					</table>
+					
+					<table class="table" th:if="${role.equals('KORISNIK')}">
+					  <thead>
+						<tr>
+						  <th scope="col">Id korisnika</th>
+						  <th scope="col">Vrijeme prijave</th>
+						  <th scope="col">Vrijeme dolaska</th>
+						  <th scope="col">Id servisera</th>
+						  <th scope="col">Reg zamjensko</th>
+						  <th scope="col">Preuzeto</th>
+						  <th scope="col">Zavrseno</th>
+						  <th></th>
+						</tr>
+					  </thead>
+					  
+					  <tbody>
+						<tr th:each="prijava : ${prijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.getIdServisera()}"></span></td>
+							<td><span th:text="${prijava.getRegZamjensko() == null ? ' ' : prijava.getRegZamjensko()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>
+							<td th:unless="${prijava.isPreuzeto()}">							
+								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Edit</a>    
+							</td>
+						</tr>
+						
+						<tr class="prihvacena" th:each="prijava : ${preuzetePrijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.getIdServisera()}"></span></td>
+							<td><span th:text="${prijava.getRegZamjensko() == null ? ' ' : prijava.getRegZamjensko()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>
+						</tr>
+						
+						<tr class="obavljena" th:each="prijava : ${gotovePrijave}">
+							<td><span th:text="${prijava.getPrijavaKey().getIdKorisnika()}"></span></td>
+							<td><span th:text="${prijava.getPrijavaKey().getVrijemePrijave()}"></span></td>
+							<td><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
+							<td><span th:text="${prijava.getIdServisera()}"></span></td>
+							<td><span th:text="${prijava.getRegZamjensko() == null ? ' ' : prijava.getRegZamjensko()}"></span></td>
+							<td><span th:text="${prijava.isPreuzeto()}"></span></td>
+							<td><span th:text="${prijava.isZavrseno()}"></span></td>
+						</tr>
+						
+					  </tbody>
+					</table>
+				
+				</div>
+			</div>
+		</div>
+
+
+    </main>
+
+    <footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Povratak na vrh</a>
+        </p>
+        <p>&copy; 2017-2018 AutoServis</p>
+        <p>Link 1 <a href="#">Link 1</a>.</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/holder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>    
+  </body>
+</html>

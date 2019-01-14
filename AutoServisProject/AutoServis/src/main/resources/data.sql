@@ -1,0 +1,20 @@
+SET NAMES utf8;
+replace into user(user_id, email, password, name, last_name, active, broj_Telefona, role) values(0, 'admin@admin.hr', '$2a$10$byvHamNquEgFfTaXJiL/9.sCPtQel5zh0nf8vlghOal5TR.quiJTe', 'Admin', 'Admin', 1, '0990000000', 'ADMIN'); 
+replace into usluga(id_usluge, ime_usluge, cijena_usluge) values (1, 'zamjena guma', 200);
+replace into usluga(id_usluge, ime_usluge, cijena_usluge) values (2, 'zamjena ulja', 230);
+replace into usluga(id_usluge, ime_usluge, cijena_usluge) values (3, 'zamjena filtera zraka', 100);
+replace into usluga(id_usluge, ime_usluge, cijena_usluge) values (4, 'zamjena filtera ulja', 100);
+replace into usluga(id_usluge, ime_usluge, cijena_usluge) values (5, 'zamjena kocnica', 170);
+replace into radno_vrijeme(id_radnog_vremena, pon_pocetak, pon_kraj, uto_pocetak, uto_kraj, sri_pocetak, sri_kraj, cet_pocetak, cet_kraj, pet_pocetak, pet_kraj)values (1, '7:00:00', '13:00:00', '12:00:00', '18:00:00', '7:00:00', '13:00:00', '12:00:00', '18:00:00', '7:00:00', '13:00:00');
+replace into radno_vrijeme(id_radnog_vremena, pon_pocetak, pon_kraj, uto_pocetak, uto_kraj, sri_pocetak, sri_kraj, cet_pocetak, cet_kraj, pet_pocetak, pet_kraj)values (2, '12:00:00', '18:00:00', '7:00:00', '13:00:00', '12:00:00', '18:00:00', '7:00:00', '13:00:00', '12:00:00', '18:00:00');
+
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123AB", "Astra", 2008);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456AB", "Vectra", 2009);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789AB", "Astra", 2010);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123CD", "Zafira", 2011);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456CD", "Astra", 2012);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789CD", "Corsa", 2013);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123EF", "Astra", 2014);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG456EF", "Insignia", 2015);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG789EF", "Astra", 2016);
+insert ignore into zamjensko_vozilo(reg_oznaka_vozila, tip_vozila, godina_proizvodnje) values("ZG123GH", "Insignia", 2017);

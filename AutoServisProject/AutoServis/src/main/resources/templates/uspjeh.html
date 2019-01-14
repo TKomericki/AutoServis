@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+      
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" th:href="@{/images/index.ico}">
+
+    <title>Uspješna prijava popravka</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/pocetna.css}">
+    
+    
+  </head>
+
+  <body>
+
+    <header>
+      <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-md-7 py-4">
+              <h4 class="text-white">O Autoservisu</h4>
+              <p class="text-muted">Neke informacije o autoservisu fkt mi se ne da sad izmisljat lako to poslje promijenimo.</p>
+            </div>
+            <div class="col-sm-4 offset-md-1 py-4">
+              <h4 class="text-white">Kontakt</h4>
+              <ul class="list-unstyled">
+                <li><a href="#" class="text-white">Facebook</a></li>
+                <li><a class="text-white">Adresa: Izmisljena adresa 13</a></li>
+                <li><a class="text-white">Email: auto.servis@as.hr</a></li>
+				<li><a class="text-white">Radno vrijeme: radnim danom 7:00 do 18:00</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+          <a href="pocetna" class="navbar-brand d-flex align-items-center">
+            <strong>AutoServis</strong>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main role="main">
+
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 class="jumbotron-heading">Izvršeno</h1>
+          <p class="lead text-muted" th:text="${Message}"></p>
+          <p>
+            <a href="ispis" class="btn btn-primary my-2">Povratak na moj profil</a>
+            <a href="pocetna" class="btn btn-secondary my-2">Povratak na početnu</a>
+          </p>    
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer-sticky text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Povratak na vrh</a>
+        </p>
+        <p>&copy; 2017-2018 AutoServis</p>
+        <p>Link 1 <a href="#">Link 1</a>.</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/holder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>    
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.container {
+  max-width: 960px;
+}
+
+.lh-condensed { line-height: 1.25; }
+
+.col-md-8 {
+    margin: auto;
+}
+
+.validation-message{
+	color: #c51244;
+}
