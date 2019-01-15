@@ -220,6 +220,17 @@ public class LoginController {
     
     @RequestMapping(value= {"/prijavaPopravka"}, method = RequestMethod.POST)
     public ModelAndView prijavaPopravka(PrijavaModel prijavaModel) {
+    	
+    	if(prijavaModel.getVrijemeDolaska() == null || prijavaModel.getUsluge().isEmpty()) {
+    		ModelAndView modelAndView;
+    		if(prijavaModel.getIdServisera().isEmpty()) modelAndView = this.popravak("");
+    		else modelAndView = this.popravak(userService.findUserById(Integer.parseInt(prijavaModel.getIdServisera())).getEmail());
+    		modelAndView.addObject("prijava", prijavaModel);
+    		if(prijavaModel.getVrijemeDolaska() == null) modelAndView.addObject("missingDatum", "Molimo unesite datum dolaska u servis");
+    		if(prijavaModel.getUsluge().isEmpty()) modelAndView.addObject("missingUsluge", "Molimo odaberite barem jednu uslugu za popravak");
+    		return modelAndView;   		 
+    	}
+    	
     	ModelAndView modelAndView = new ModelAndView();
 
     	User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -289,7 +300,7 @@ public class LoginController {
     	vremena.add(radnoVrijeme.getCetvrtakPocetak());
     	vremena.add(radnoVrijeme.getPetakPocetak());
     	
-    	Set<LocalDate> datumi = new HashSet<>();
+    	List<LocalDate> datumi = new ArrayList<>();
     	for(int i = 1; i <= 10; i++) {
     		LocalDateTime newDate = date.plusDays(i);
     		int day = newDate.getDayOfWeek().getValue();
@@ -298,12 +309,13 @@ public class LoginController {
     		}    		
     	}
     	
-    	List<ZamjenskoVozilo> vozila = userService.getSlobodnaVozila();
+    	List<ZamjenskoVozilo> vozila = new ArrayList<>();
     	if(!prijavaModel.getRegZamjensko().isEmpty()) vozila.add(userService.getVoziloById(prijavaModel.getRegZamjensko()));
+    	vozila.addAll(userService.getSlobodnaVozila());
     	User currentUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     	
     	modelAndView.addObject("isKorisnik", currentUser.getRole().equals("KORISNIK"));
-    	modelAndView.addObject("datumi", datumi.stream().sorted().collect(Collectors.toSet()));
+    	modelAndView.addObject("datumi", datumi);
     	modelAndView.addObject("prijavaModel", prijavaModel);
     	modelAndView.addObject("usluge", userService.getAllUsluge());
     	modelAndView.addObject("zamjenskaVozila", vozila);
@@ -328,6 +340,12 @@ public class LoginController {
     
     @RequestMapping(value = {"/popravakPromijenjen"}, method = RequestMethod.POST)
     public ModelAndView popravakPromijenjen(PrijavaModel prijavaModel) {
+    	if(prijavaModel.getUsluge().isEmpty()) {
+    		ModelAndView modelAndView = this.editPrijava(prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave()));
+    		modelAndView.addObject("missingUsluge", "Molimo odaberite barem jednu uslugu za popravak");
+    		return modelAndView;   		 
+    	}
+    	
     	ModelAndView modelAndView = new ModelAndView();
     	
     	Prijava staraPrijava = userService.findPrijavaByPrijavaKey(prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave())).get();
@@ -377,7 +395,7 @@ public class LoginController {
     	prijava.setPreuzeto(true);
     	userService.savePrijava(prijava);
     	
-    	modelAndView.addObject("Message", "Prijava je uspješno oznaćena kao završena.");
+    	modelAndView.addObject("Message", "Prijava je uspješno prihvaćena.");
     	modelAndView.setViewName("uspjeh");
     	return modelAndView;
     }

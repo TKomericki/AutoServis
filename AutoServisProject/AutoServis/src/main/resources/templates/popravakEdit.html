@@ -38,7 +38,7 @@
 		  <form class="needs-validation" novalidate autocomplete="off" th:action="@{/popravakPromijenjen}"
                   th:object="${prijavaModel}" method="post" role="form">
 		  
-			<hr class="mb-4">
+			
 			
 			<textarea th:field="*{idServisera}" th:text="${prijavaModel.getIdServisera()}" hidden></textarea>
 			<textarea th:field="*{korisnikId}" th:text="${prijavaModel.getKorisnikId()}" hidden></textarea>
@@ -47,7 +47,7 @@
           <textarea th:field="*{vrijemeDolaska}" th:text="${prijavaModel.getVrijemeDolaska()}" hidden></textarea>
       </div>        
 			  <div th:if="${isKorisnik}" class="container" id="containerNoLeftPadding">
-			  
+          <hr class="mb-4">
                 <label for="vrijemeDolaska">Vrijeme dolaska:</label>
 				
 				<!-- To group radio buttons they must all have the same name value. 
@@ -59,7 +59,7 @@
 				</label>
 				</div>
 				
-              </div>
+        </div>
 			  
 			  <hr class="mb-4">
 			  
@@ -75,7 +75,7 @@
 					  <span class="checkmark"></span>
 					</label>
 					</div>
-					
+					<label style="font-size: 20; color: #FF1C19;" th:text="${missingUsluge}"></label>
 				</div>
 				  
 				<div class="container" id="containerNoLeftPadding">
@@ -110,7 +110,8 @@
 		
             <hr class="mb-4">
             
-			<button class="btn btn-primary btn-lg btn-block" type="submit">Spremi izmjene</button>
+      <button class="btn btn-primary btn-lg btn-block" type="submit">Spremi izmjene</button>
+      <a href="ispis" class="btn btn-primary my-2">Odustani od izmjena</a>
 			
           </form>
         </div>
