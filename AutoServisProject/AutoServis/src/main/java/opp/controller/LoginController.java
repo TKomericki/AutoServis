@@ -2,10 +2,12 @@ package opp.controller;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -37,6 +39,9 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private EmailServiceImpl emailService;
 
     @RequestMapping(value={"/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
@@ -45,6 +50,33 @@ public class LoginController {
         return modelAndView;
     }
 
+    @RequestMapping(value={"/zaboravljenaLozinka"}, method = RequestMethod.GET)
+    public ModelAndView zaboravljenaLozinka(){    	
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("emailTemplate", new Email());
+        modelAndView.setViewName("email");
+        return modelAndView;
+    }
+    
+    @RequestMapping(value={"/zaboravljenaLozinka"}, method = RequestMethod.POST)
+    public ModelAndView slanjeLozinke(Email emailTemplate){    	
+        ModelAndView modelAndView = new ModelAndView();
+        
+        User user = userService.findUserByEmail(emailTemplate.getEmail());
+        if(user == null) {
+        	modelAndView.addObject("emailTemplate", emailTemplate);
+        	modelAndView.addObject("wrongEmail", "Ne postoji korisnik s tim emailom!");
+            modelAndView.setViewName("email");
+            return modelAndView;
+        }                
+        
+        String message = new String("Poštovani,\n\nVaša lozinka je:\n" + user.getOriginalPassword() + "\n\nVaš auto servis.");
+        emailService.sendSimpleMessage(emailTemplate.getEmail(), "Zaboravljena lozinka", message);
+        
+        modelAndView.addObject("sent", "lozinka vam je poslana na mail");
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
 
     @RequestMapping(value="/registration", method = RequestMethod.GET)
     public ModelAndView registration(){
@@ -114,7 +146,7 @@ public class LoginController {
     public ModelAndView pocetna(){
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	boolean isLoggedIn = !auth.getName().equals("anonymousUser");
-
+    	
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("isLoggedIn", isLoggedIn);
         modelAndView.setViewName("pocetna");
@@ -127,23 +159,65 @@ public class LoginController {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	User user = userService.findUserByEmail(auth.getName());
     	List<User> users = new ArrayList<>();
-    	List<Prijava> prijave = new ArrayList<>();
-    	List<Prijava> preuzetePrijave = new ArrayList<>();
-    	List<Prijava> gotovePrijave = new ArrayList<>();
+    	List<ProfilePodaci> prijave = new ArrayList<>();
+    	List<ProfilePodaci> preuzetePrijave = new ArrayList<>();
+    	List<ProfilePodaci> gotovePrijave = new ArrayList<>();
     	String role = "";
     	
     	for(GrantedAuthority authority : auth.getAuthorities()) {
     		role = authority.getAuthority();
     		if(authority.getAuthority().equals("ADMIN")) users.addAll(userService.getAllUsers());
-    		else if(authority.getAuthority().equals("KORISNIK")) { 
-    			prijave.addAll(userService.getUserPrijave(user.getId()));
-    			preuzetePrijave.addAll(userService.getUserPreuzetePrijave(user.getId()));
-    			gotovePrijave.addAll(userService.getUserZavrsenePrijave(user.getId()));
+    		else if(authority.getAuthority().equals("KORISNIK")) {
+    			for(Prijava prijava : userService.getUserPrijave(user.getId())){
+    				ProfilePodaci podaci = new ProfilePodaci();
+    				podaci.setPrijavaKey(prijava.getPrijavaKey());
+    				User serviser = userService.findUserById(prijava.getIdServisera());
+    				podaci.setImeKorisnika(serviser.getName() + " " + serviser.getLastName());
+    				podaci.setVrijemeDolaska(prijava.getVrijemeDolaska());
+    				prijave.add(podaci);
+    			}
+    			for(Prijava prijava : userService.getUserPreuzetePrijave(user.getId())){
+    				ProfilePodaci podaci = new ProfilePodaci();
+    				podaci.setPrijavaKey(prijava.getPrijavaKey());
+    				User serviser = userService.findUserById(prijava.getIdServisera());
+    				podaci.setImeKorisnika(serviser.getName() + " " + serviser.getLastName());
+    				podaci.setVrijemeDolaska(prijava.getVrijemeDolaska());
+    				preuzetePrijave.add(podaci);
+    			}
+    			for(Prijava prijava : userService.getUserZavrsenePrijave(user.getId())){
+    				ProfilePodaci podaci = new ProfilePodaci();
+    				podaci.setPrijavaKey(prijava.getPrijavaKey());
+    				User serviser = userService.findUserById(prijava.getIdServisera());
+    				podaci.setImeKorisnika(serviser.getName() + " " + serviser.getLastName());
+    				podaci.setVrijemeDolaska(prijava.getVrijemeDolaska());
+    				gotovePrijave.add(podaci);
+    			}
     		}
     		else if(authority.getAuthority().equals("SERVISER")) { 
-    			prijave.addAll(userService.getServiserPrijave(user.getId()));
-    			preuzetePrijave.addAll(userService.getServiserPreuzetePrijave(user.getId()));
-    			gotovePrijave.addAll(userService.getServiserZavrsenePrijave(user.getId()));
+    			for(Prijava prijava : userService.getServiserPrijave(user.getId())){
+    				ProfilePodaci podaci = new ProfilePodaci();
+    				podaci.setPrijavaKey(prijava.getPrijavaKey());
+    				User korisnik = userService.findUserById(prijava.getPrijavaKey().getIdKorisnika());
+    				podaci.setImeKorisnika(korisnik.getName() + " " + korisnik.getLastName());
+    				podaci.setVrijemeDolaska(prijava.getVrijemeDolaska());
+    				prijave.add(podaci);
+    			}
+    			for(Prijava prijava : userService.getServiserPreuzetePrijave(user.getId())){
+    				ProfilePodaci podaci = new ProfilePodaci();
+    				podaci.setPrijavaKey(prijava.getPrijavaKey());
+    				User korisnik = userService.findUserById(prijava.getPrijavaKey().getIdKorisnika());
+    				podaci.setImeKorisnika(korisnik.getName() + " " + korisnik.getLastName());
+    				podaci.setVrijemeDolaska(prijava.getVrijemeDolaska());
+    				preuzetePrijave.add(podaci);
+    			}
+    			for(Prijava prijava : userService.getServiserZavrsenePrijave(user.getId())){
+    				ProfilePodaci podaci = new ProfilePodaci();
+    				podaci.setPrijavaKey(prijava.getPrijavaKey());
+    				User korisnik = userService.findUserById(prijava.getPrijavaKey().getIdKorisnika());
+    				podaci.setImeKorisnika(korisnik.getName() + " " + korisnik.getLastName());
+    				podaci.setVrijemeDolaska(prijava.getVrijemeDolaska());
+    				gotovePrijave.add(podaci);
+    			}
     		}
     	}
     	
@@ -179,7 +253,7 @@ public class LoginController {
     	ModelAndView modelAndView = new ModelAndView();
     	PrijavaModel prijava = new PrijavaModel();
     	//prijava.setUsluge(new HashSet<>());
-    	Set<LocalDate> datumi = new HashSet<>();
+    	List<LocalDate> datumi = new ArrayList<>();
     	LocalDateTime date = LocalDateTime.now();
     	List<ZamjenskoVozilo> zamjenskaVozila = userService.getSlobodnaVozila();
     	if(email.isEmpty()) {
@@ -220,6 +294,17 @@ public class LoginController {
     
     @RequestMapping(value= {"/prijavaPopravka"}, method = RequestMethod.POST)
     public ModelAndView prijavaPopravka(PrijavaModel prijavaModel) {
+    	
+    	if(prijavaModel.getVrijemeDolaska() == null || prijavaModel.getUsluge().isEmpty()) {
+    		ModelAndView modelAndView;
+    		if(prijavaModel.getIdServisera().isEmpty()) modelAndView = this.popravak("");
+    		else modelAndView = this.popravak(userService.findUserById(Integer.parseInt(prijavaModel.getIdServisera())).getEmail());
+    		modelAndView.addObject("prijava", prijavaModel);
+    		if(prijavaModel.getVrijemeDolaska() == null) modelAndView.addObject("missingDatum", "Molimo unesite datum dolaska u servis");
+    		if(prijavaModel.getUsluge().isEmpty()) modelAndView.addObject("missingUsluge", "Molimo odaberite barem jednu uslugu za popravak");
+    		return modelAndView;   		 
+    	}
+    	
     	ModelAndView modelAndView = new ModelAndView();
 
     	User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -289,7 +374,7 @@ public class LoginController {
     	vremena.add(radnoVrijeme.getCetvrtakPocetak());
     	vremena.add(radnoVrijeme.getPetakPocetak());
     	
-    	Set<LocalDate> datumi = new HashSet<>();
+    	List<LocalDate> datumi = new ArrayList<>();
     	for(int i = 1; i <= 10; i++) {
     		LocalDateTime newDate = date.plusDays(i);
     		int day = newDate.getDayOfWeek().getValue();
@@ -298,12 +383,13 @@ public class LoginController {
     		}    		
     	}
     	
-    	List<ZamjenskoVozilo> vozila = userService.getSlobodnaVozila();
+    	List<ZamjenskoVozilo> vozila = new ArrayList<>();
     	if(!prijavaModel.getRegZamjensko().isEmpty()) vozila.add(userService.getVoziloById(prijavaModel.getRegZamjensko()));
+    	vozila.addAll(userService.getSlobodnaVozila());
     	User currentUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     	
     	modelAndView.addObject("isKorisnik", currentUser.getRole().equals("KORISNIK"));
-    	modelAndView.addObject("datumi", datumi.stream().sorted().collect(Collectors.toSet()));
+    	modelAndView.addObject("datumi", datumi);
     	modelAndView.addObject("prijavaModel", prijavaModel);
     	modelAndView.addObject("usluge", userService.getAllUsluge());
     	modelAndView.addObject("zamjenskaVozila", vozila);
@@ -328,6 +414,12 @@ public class LoginController {
     
     @RequestMapping(value = {"/popravakPromijenjen"}, method = RequestMethod.POST)
     public ModelAndView popravakPromijenjen(PrijavaModel prijavaModel) {
+    	if(prijavaModel.getUsluge().isEmpty()) {
+    		ModelAndView modelAndView = this.editPrijava(prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave()));
+    		modelAndView.addObject("missingUsluge", "Molimo odaberite barem jednu uslugu za popravak");
+    		return modelAndView;   		 
+    	}
+    	
     	ModelAndView modelAndView = new ModelAndView();
     	
     	Prijava staraPrijava = userService.findPrijavaByPrijavaKey(prijavaModel.getKorisnikId(), Timestamp.valueOf(prijavaModel.getVrijemePrijave())).get();
@@ -374,10 +466,42 @@ public class LoginController {
     	ModelAndView modelAndView = new ModelAndView();    	
     	
     	Prijava prijava = userService.findPrijavaByPrijavaKey(id, vrijeme).get();
+    	
+    	
+    	User korisnik = userService.findUserById(prijava.getPrijavaKey().getIdKorisnika());
+    	User serviser = userService.findUserById(prijava.getIdServisera());
+    	List<Integer> idUsluga = userService.getPrijavaUslugeId(id, vrijeme);
+    	
+    	DateTimeFormatter format = DateTimeFormatter.ofPattern("DD.MM.YYYY");
+    	LocalDateTime fullDate = vrijeme.toLocalDateTime();    	
+    	String date = fullDate.toLocalDate().format(format);
+    	String dateDolaska = prijava.getVrijemeDolaska().format(format);
+    	
+    	format = DateTimeFormatter.ofPattern("HH:mm:ss");
+    	String time = fullDate.toLocalTime().format(format);
+    	
+    	
+    	
+    	String message = new String("Poštovani " + korisnik.getName() + " " + korisnik.getLastName()
+    								+ ",\n\nobaviještavamo Vas da je Vaša prijava stvorena " + date + " u " + time + " prihvaćena za popravak od strane servisera.\n\n" 
+    								+ "Ostali podaci:\nServiser: " + serviser.getName() + " " + serviser.getLastName()
+    								+ "\n\nVaš automobil: " + korisnik.getTipVozila() + " " + korisnik.getGodinaProizvodnje() + " " + korisnik.getRegistracija()
+    								+ "\n\nUsluge:\n");
+    	
+    	for(int idUsluge : idUsluga) {
+    		Usluga usluga = userService.getUslugaById(idUsluge).get();
+    		message += usluga.getImeUsluge() + " " + usluga.getCijena() + " kn\n";
+    	}
+    	
+    	message += "\nDodatni zahtjevi: " + prijava.getDodatniZahtjevi() + "\n\nVrijeme dolaska: " + dateDolaska 
+    			+ "\n\nMolimo Vas pridržavajte se dogovorenog vremena dolaska.\nHvala Vam na povjerenju.\n\nVaš auto servis!";
+    	
+    	emailService.sendSimpleMessage(korisnik.getEmail(), "Preuzeta prijava", message);   	
+    	
     	prijava.setPreuzeto(true);
     	userService.savePrijava(prijava);
     	
-    	modelAndView.addObject("Message", "Prijava je uspješno oznaćena kao završena.");
+    	modelAndView.addObject("Message", "Prijava je uspješno prihvaćena.");
     	modelAndView.setViewName("uspjeh");
     	return modelAndView;
     }

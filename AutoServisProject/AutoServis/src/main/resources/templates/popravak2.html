@@ -42,20 +42,17 @@
 			
 			<div class="container">
               
-			  <div class="container" id="containerNoLeftPadding">
-			  
-                <label for="vrijemeDolaska">Vrijeme dolaska:</label>
-				
-				<!-- To group radio buttons they must all have the same name value. 
-				This allows only one to be selected at a time and applies required to the whole group. -->
-                <div class="container" th:each="datum : ${datumi}">
-				<label class="RadioContainer">
-					<input type="radio" name="datum" th:field="*{vrijemeDolaska}" th:value="${datum}" th:text="${datum}" required>
-					<span class="checkmark"></span>
-				</label>
-				</div>
-				
-              </div>
+			  <div class="container">
+            <label for="vrijemeDolaska">Vrijeme dolaska:</label>
+            <div class="container" th:each="datum : ${datumi}">
+            <label class="RadioContainer"><label th:text="${datum}"></label>
+              <input type="radio" name="radio" th:field="*{vrijemeDolaska}" th:value="${datum}" required>
+              <span class="checkmark"></span>
+            </label>
+            
+          </div>
+          <label style="font-size: 20; color: #FF1C19;" th:text="${missingDatum}"></label>
+        </div>
 			  
 			  <hr class="mb-4">
 			  
@@ -67,11 +64,11 @@
 					
 					<div class="container" th:each="usluga : ${usluge}">
 					<label class="CheckContainer">
-					  <input type="checkbox" th:field="*{usluge}" th:value="${usluga.getIdUsluge()}" th:text="${usluga.getImeUsluge()}">
+					  <input type="checkbox" th:field="*{usluge}" th:value="${usluga.getIdUsluge()}" th:text="${usluga.getImeUsluge()} + ' ' + ${usluga.getCijena()} + ' kn'">
 					  <span class="checkmark"></span>
 					</label>
 					</div>
-					
+					<label style="font-size: 20; color: #FF1C19;" th:text="${missingUsluge}"></label>
 				</div>
 				  
 				<div class="container" id="containerNoLeftPadding">
@@ -104,12 +101,12 @@
               </div>
 				
 			  
-            </div>
+      </div>
 			<textarea th:field="*{idServisera}" th:text="${prijava.getIdServisera()}" hidden></textarea>
             <hr class="mb-4">
             
 			<button class="btn btn-primary btn-lg btn-block" type="submit">Završi prijavu vozila</button>
-			
+			<a href="ispis" class="btn btn-primary my-2">Odustani</a>
           </form>
         </div>
       </div>
