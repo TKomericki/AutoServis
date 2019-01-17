@@ -5,6 +5,7 @@
     <title>RegistracijaServisera</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}"/>
+    <link rel="icon" th:href="@{/images/logo.ico}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -131,7 +132,7 @@
 			<hr class="mb-4">
 
             <button type="submit" class="btn btn-primary btn-block">Registriraj Servisera</button>
-            <a href="ispis" class="btn btn-primary my-2">Odustani</a>
+			<a href="ispis" class="btn btn-default">Odustani od izmjena.</a>
                 <h2><span class="text-success" th:utext="${successMessage}"></span></h2>
 
             </form>
@@ -140,13 +141,6 @@
 	
 	<footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">&copy; 2017-2018 AutoServis</p>
-		<!--
-        <ul class="list-inline">
-          <li class="list-inline-item"><a href="#">Privacy</a></li>
-          <li class="list-inline-item"><a href="#">Terms</a></li>
-          <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
-		-->
 	</footer>
 	
 </div>

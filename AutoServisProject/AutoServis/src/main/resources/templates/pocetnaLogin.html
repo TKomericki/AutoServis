@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" th:href="@{/images/index.ico}">
+    <link rel="icon" th:href="@{/images/logo.ico}">
 
     <title>Dobrodošli</title>
 
@@ -30,12 +30,11 @@
           <div class="row">
             <div class="col-sm-8 col-md-7 py-4">
               <h4 class="text-white">O Autoservisu</h4>
-              <p class="text-muted">Neke informacije o autoservisu fkt mi se ne da sad izmisljat lako to poslje promijenimo.</p>
+              <p class="text-muted">Neke informacije o autoservisu.</p>
             </div>
             <div class="col-sm-4 offset-md-1 py-4">
               <h4 class="text-white">Kontakt</h4>
               <ul class="list-unstyled">
-                <li><a href="#" class="text-white">Facebook</a></li>
                 <li><a class="text-white">Adresa: Izmisljena adresa 13</a></li>
                 <li><a class="text-white">Email: auto.servis@as.hr</a></li>
 				<li><a class="text-white">Radno vrijeme: radnim danom 7:00 do 18:00</a></li>
@@ -66,8 +65,10 @@
             <a href="popravak" th:if="${role.equals('KORISNIK')}" class="btn btn-primary my-2">Prijavi popravak vozila</a>
             <a href="registracijaServisera" th:if="${role.equals('ADMIN')}" class="btn btn-primary my-2">Registriraj Servisera</a>
             <a href="#" class="btn btn-primary my-2">Uredi profil</a>
-            <a href="logout" class="btn btn-primary my-2">Odjava</a>
           </p>
+		  <p>
+			<a href="logout" class="btn btn-secondary my-2">Odjava</a>
+		  </p>
         </div>
       </section>
 
@@ -91,7 +92,7 @@
 							<td><span th:text="${user.getEmail()}"></span></td>
 							<td><span th:text="${user.getName()}"></span></td>
 							<td><span th:text="${user.getLastName()}"></span></td>
-							<td><a th:href="@{'editKorisnik?email=' + ${user.getEmail()}}" class="btn btn-primary my-2">Edit</a></td>
+							<td><a th:href="@{'editKorisnik?email=' + ${user.getEmail()}}" class="btn btn-primary my-2">Uredi</a></td>
 						</tr>
 					  </tbody>
 					</table>
@@ -114,7 +115,7 @@
 							<td class="align-middle"><span th:text="${prijava.getImeKorisnika()}"></span></td>
 							<td class="align-middle"><span th:text="${prijava.getVrijemeDolaska()}"></span></td>						
 							<td>							
-								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Edit</a>    
+								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Uredi</a>    
           					</td>
           					<td>
 								<a th:href="@{'prihvatiPopravak?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Prihvati</a>
@@ -126,7 +127,7 @@
 							<td class="align-middle"><span th:text="${prijava.getImeKorisnika()}"></span></td>
 							<td class="align-middle"><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
 							<td>
-								<a th:href="@{'popravakZavrsen?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Zavrsi</a>
+								<a th:href="@{'popravakZavrsen?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Završi</a>
 							</td>
 							<td>
 							</td>
@@ -162,7 +163,7 @@
 							<td class="align-middle"><span th:text="${prijava.getImeKorisnika()}"></span></td>
 							<td class="align-middle"><span th:text="${prijava.getVrijemeDolaska()}"></span></td>
 							<td>							
-								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Edit</a>    
+								<a th:href="@{'editPrijava?id=' + ${prijava.getPrijavaKey().getIdKorisnika()} + '&amp;vrijeme=' + ${prijava.getPrijavaKey().getVrijemePrijave()}}">Uredi</a>    
 							</td>
 						</tr>
 						
@@ -196,7 +197,6 @@
           <a href="#">Povratak na vrh</a>
         </p>
         <p>&copy; 2017-2018 AutoServis</p>
-        <p>Link 1 <a href="#">Link 1</a>.</p>
       </div>
     </footer>
 

@@ -5,6 +5,7 @@
     <title>Registracija</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}"/>
+    <link rel="icon" th:href="@{/images/logo.ico}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -58,6 +59,8 @@
                 <!--</div>-->
             </div>
                 
+			<hr class="mb-4">
+				
                     <div class="mb-3">
                         <label for="state">Email</label>
                         <input type="email" th:field="*{email}" placeholder="vi@primjer.com"
@@ -83,6 +86,7 @@
 
                     </div>
                 
+			<hr class="mb-4"> 	
                 
                     <div class="mb-3">
                         <label for="state">Broj Telefona</label>
@@ -95,7 +99,8 @@
 						</div>
 
                     </div>
-                
+					
+            <hr class="mb-4">     
 
                 <div class="row">
                 
@@ -163,6 +168,8 @@
                     </div>
                 
             </div>
+			
+			<hr class="mb-4"> 
 
             <button type="submit" class="btn btn-primary btn-block">Registriraj se</button>
 
@@ -175,13 +182,6 @@
 
     <footer class="my-5 pt-5 text-muted text-center text-small">
             <p class="mb-1">&copy; 2017-2018 AutoServis</p>
-            <!--
-            <ul class="list-inline">
-              <li class="list-inline-item"><a href="#">Privacy</a></li>
-              <li class="list-inline-item"><a href="#">Terms</a></li>
-              <li class="list-inline-item"><a href="#">Support</a></li>
-            </ul>
-            -->
     </footer>
     
 </div>
