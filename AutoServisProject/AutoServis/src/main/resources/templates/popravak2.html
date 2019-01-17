@@ -64,7 +64,7 @@
 					
 					<div class="container" th:each="usluga : ${usluge}">
 					<label class="CheckContainer">
-					  <input type="checkbox" th:field="*{usluge}" th:value="${usluga.getIdUsluge()}" th:text="${usluga.getImeUsluge()}">
+					  <input type="checkbox" th:field="*{usluge}" th:value="${usluga.getIdUsluge()}" th:text="${usluga.getImeUsluge()} + ' ' + ${usluga.getCijena()} + ' kn'">
 					  <span class="checkmark"></span>
 					</label>
 					</div>

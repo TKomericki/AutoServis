@@ -23,13 +23,13 @@
 	
         <div class="col-md-8 order-md-1">
 		
-            <form autocomplete="off" action="#" th:action="@{/registration}"
-                  th:object="${user}" method="post" class="form-horizontal needs-validation" novalidate
+            <form autocomplete="off" action="#" th:action="@{/zaboravljenaLozinka}"
+                  th:object="${emailTemplate}" method="post" class="form-horizontal needs-validation" novalidate
                   role="form">
             
 				<div class="input-group">
 					<div class="col-md-7 mb-3 align-self-xl-center">
-						<input type="email" class="form-control" id="email" placeholder="Email" required>
+						<input type="email" th:field="*{email}" placeholder="Email" class="form-control" required>
 						<div class="invalid-feedback">
 							Molimo unesite ispravnu adresu e-pošte.
 						</div>
@@ -39,7 +39,8 @@
 						<span class="input-group-btn">
 							<button class="btn btn-primary btn-lg btn-block" type="submit">Potvrdi</button>
 						</span>
-					</div>
+                    </div>
+                    <label style="font-size: 20; color: #FF1C19;" th:text="${wrongEmail}"></label>
 				</div>
 
             </form>

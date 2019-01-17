@@ -56,6 +56,7 @@ public class UserService {
     }
 
     public User saveUser(User user) {
+    	user.setOriginalPassword(new String(user.getPassword()));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(1);
         user.setRole("KORISNIK");
@@ -70,17 +71,22 @@ public class UserService {
     public User replaceUser(User newUser) {
     	System.out.println(newUser.getId());
     	User oldUser = userRepository.findById(newUser.getId()).get();
-    	if(newUser.getPassword().isEmpty()) newUser.setPassword(oldUser.getPassword());
-    	else newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-    	//userRepository.delete(oldUser);
+    	if(newUser.getPassword().isEmpty()) { 
+    		newUser.setOriginalPassword(oldUser.getOriginalPassword());
+    		newUser.setPassword(oldUser.getPassword());
+    	}
+    	else {
+    		newUser.setOriginalPassword(new String(newUser.getPassword()));
+    		newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+    	}
     	userRepository.save(newUser);
 
     	return newUser;
     }
     
     public User saveServiser(User serviser) {
+    	serviser.setOriginalPassword(new String(serviser.getPassword()));
         serviser.setPassword(bCryptPasswordEncoder.encode(serviser.getPassword()));
-        serviser.setId(this.getAllUsers().size());
         serviser.setActive(1);
         serviser.setRole("SERVISER");
         return userRepository.save(serviser);
@@ -93,8 +99,8 @@ public class UserService {
     	return users;
     }
     
-    public Set<User> getAllServiseri(){
-    	Set<User> serviseri = new HashSet<>();
+    public List<User> getAllServiseri(){
+    	List<User> serviseri = new ArrayList<>();
     	serviseri.addAll(userRepository.findAll());
     	serviseri.removeIf(r -> !r.getRole().equals("SERVISER"));
     	return serviseri;
@@ -202,7 +208,7 @@ public class UserService {
     	return uslugaRepository.findById(id);
     }
     
-    public void addUslugaPrijavaVeze(Set<Integer> uslugeId, int id, Timestamp vrijeme) {
+    public void addUslugaPrijavaVeze(List<Integer> uslugeId, int id, Timestamp vrijeme) {
     	for(int uslugaId : uslugeId) {
     		VezaUslugaPrijava veza = new VezaUslugaPrijava();
     		veza.setVezaUslugaPrijava(new UslugaPrijavaKey());
@@ -222,16 +228,16 @@ public class UserService {
     	return usluge;
     }
     
-    public Set<Integer> getPrijavaUslugeId(int id, Timestamp vrijeme){
+    public List<Integer> getPrijavaUslugeId(int id, Timestamp vrijeme){
     	List<VezaUslugaPrijava> veze = vezaUslugaPrijavaRepository.findAll();
     	veze.removeIf(s -> s.getVezaUslugaPrijava().getIdKorisnika() != id || !s.getVezaUslugaPrijava().getVrijemePrijave().equals(vrijeme));
     	
-    	Set<Integer> usluge = new HashSet<>();
+    	List<Integer> usluge = new ArrayList<>();
     	for(VezaUslugaPrijava veza : veze) usluge.add(veza.getVezaUslugaPrijava().getIdUsluge());
     	return usluge;
     }
     
-    public void replaceUslugaPrijavaVeze(Set<Integer> uslugeId, int id, Timestamp vrijeme) {
+    public void replaceUslugaPrijavaVeze(List<Integer> uslugeId, int id, Timestamp vrijeme) {
     	List<VezaUslugaPrijava> veze = vezaUslugaPrijavaRepository.findAll();
     	veze.removeIf(s -> s.getVezaUslugaPrijava().getIdKorisnika() != id || !s.getVezaUslugaPrijava().getVrijemePrijave().equals(vrijeme));
     	List<Integer> postojeceVeze = new ArrayList<>();

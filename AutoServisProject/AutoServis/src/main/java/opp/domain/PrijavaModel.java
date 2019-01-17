@@ -2,6 +2,7 @@ package opp.domain;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public class PrijavaModel {
@@ -11,7 +12,7 @@ public class PrijavaModel {
 	private String vrijemeDolaska;
 	private String dodatniZahtjevi;
 	private String regZamjensko;
-	private Set<Integer> usluge;
+	private List<Integer> usluge;
 	
 	public PrijavaModel() {
 		
@@ -65,11 +66,11 @@ public class PrijavaModel {
 		this.regZamjensko = regZamjensko;
 	}
 
-	public Set<Integer> getUsluge() {
+	public List<Integer> getUsluge() {
 		return usluge;
 	}
 
-	public void setUsluge(Set<Integer> usluge) {
+	public void setUsluge(List<Integer> usluge) {
 		this.usluge = usluge;
 	}
 	
